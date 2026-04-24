@@ -15,10 +15,12 @@ services:
     depends_on:
       - db  # Зависимость от сервиса базы данных
     environment:
+      ENVIRONMENT: development  # Режим разработки
       DB_HOST: db  # Хост базы данных (имя сервиса)
       DB_NAME: p-351366_new-css-learn  # Имя базы данных
       DB_USER: p-351366_new-css-learn  # Пользователь базы данных
       DB_PASS: Anna-140275  # Пароль базы данных
+      APP_URL: http://localhost:8080  # URL для локальной разработки
     networks:
       - app-network  # Подключение к общей сети
 

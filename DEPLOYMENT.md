@@ -1,6 +1,40 @@
-# Инструкция по развертыванию NewCSSLearn на хостинге Hoster.kz
+# Инструкция по развертыванию NewCSSLearn
 
-## Требования к хостингу
+Приложение поддерживает два режима работы:
+- **Локальная разработка** через Docker
+- **Production развертывание** на хостинге Hoster.kz
+
+---
+
+## Локальная разработка через Docker
+
+### Требования
+- Docker и Docker Compose
+- Git
+
+### Запуск локальной среды
+1. Клонируйте репозиторий
+2. Скопируйте `.env.example` в `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+3. Запустите Docker Compose:
+   ```bash
+   docker-compose up -d
+   ```
+4. Приложение будет доступно по адресу: http://localhost:8080
+5. PhpMyAdmin доступен по адресу: http://localhost:8081
+
+### Остановка
+```bash
+docker-compose down
+```
+
+---
+
+## Production развертывание на Hoster.kz
+
+### Требования к хостингу
 - PHP версии 8.2 или выше
 - MySQL/MariaDB база данных
 - Apache с поддержкой mod_rewrite
@@ -25,22 +59,26 @@
 ## Конфигурация
 
 ### Настройка базы данных
-В файле `config.php` укажите правильные параметры подключения:
+Откройте файл `config.php` и измените параметры подключения:
 ```php
 define('DB_HOST', 'localhost'); // или адрес сервера БД
 define('DB_NAME', 'p-351366_new-css-learn');
-define('DB_USER', 'your_db_user');
-define('DB_PASS', 'your_db_password');
+define('DB_USER', 'your_db_user'); // замените на реального пользователя
+define('DB_PASS', 'your_db_password'); // замените на реальный пароль
 ```
 
 ### Настройка URL
-Замените `https://bod-hub.kz` на ваш домен:
+Замените `https://bod-hub.kz` на ваш домен в `config.php`:
 ```php
 define('APP_URL', 'https://your-domain.com');
 ```
 
 ### Настройка часового пояса
 Текущая настройка: `Asia/Almaty`. При необходимости измените на ваш часовой пояс.
+
+### Переключение между окружениями
+- **Production**: по умолчанию, ничего не нужно менять
+- **Development**: раскомментируйте строку `define('ENVIRONMENT', 'development');` в `config.php`
 
 ## Проверка работы
 

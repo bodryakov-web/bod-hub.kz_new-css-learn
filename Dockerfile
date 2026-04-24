@@ -1,23 +1,26 @@
-# Dockerfile для NewCSSLearn
-# Базовый образ: PHP 8.2 с Apache
-
 FROM php:8.2-apache
 
-# Установка необходимых расширений PHP
-# mysqli - для работы с MySQL базой данных
-# pdo pdo_mysql - для работы с базой данных через PDO
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+# Установка расширений PHP
+RUN docker-php-ext-install pdo pdo_mysql mysqli
 
-# Включение mod_rewrite для Apache (необходимо для URL роутинга)
+# Включение mod_rewrite
 RUN a2enmod rewrite
 
-# Установка прав на директорию uploads для загрузки изображений
-RUN mkdir -p /var/www/html/uploads/lessons && \
-    chown -R www-data:www-data /var/www/html/uploads && \
-    chmod -R 755 /var/www/html/uploads
+# Настройка Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
-# Копирование конфигурации Apache для включения .htaccess
-RUN echo "AllowOverride All" > /etc/apache2/sites-available/000-default.conf
+# Копирование файлов приложения
+COPY . /var/www/html/
 
-# Установка рабочей директории
-WORKDIR /var/www/html
+# Установка прав доступа
+RUN chown -R www-data:www-data /var/www/html/
+RUN chmod -R 755 /var/www/html/
+RUN chmod -R 777 /var/www/html/uploads/
+
+# Отображение ошибок для разработки
+RUN echo "display_errors = On" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+RUN echo "error_reporting = E_ALL" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
+EXPOSE 80
+
+CMD ["apache2-foreground"]
