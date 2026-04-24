@@ -31,12 +31,12 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - Админ-панель' : 'А
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <!-- Подключение CSS стилей -->
-    <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="stylesheet" href="/assets/css/admin.css">
-    <link rel="stylesheet" href="/assets/css/themes.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/assets/css/main.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/assets/css/admin.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/assets/css/themes.css">
     
     <!-- Иконка сайта -->
-    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="<?php echo APP_URL; ?>/assets/images/favicon.svg">
 </head>
 <body class="admin-body">
     <!-- Шапка админ-панели -->
