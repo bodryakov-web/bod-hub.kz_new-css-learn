@@ -45,13 +45,20 @@ class Router {
             $requestUri = 'home';
         }
         
+        // Временная отладка
+        error_log("Router: Original URI: " . $_SERVER['REQUEST_URI'] . ", Processed URI: '$requestUri'");
+        error_log("Router: Available routes: " . implode(', ', array_keys($this->routes)));
+        
         // Поиск подходящего маршрута
         foreach ($this->routes as $pattern => $handler) {
             if ($this->matchRoute($pattern, $requestUri, $params)) {
+                error_log("Router: Matched pattern '$pattern'");
                 call_user_func($handler, $params);
                 return;
             }
         }
+        
+        error_log("Router: No route matched, calling 404 handler");
         
         // Если маршрут не найден
         if ($this->notFoundHandler) {
@@ -70,16 +77,20 @@ class Router {
      */
     private function matchRoute($pattern, $requestUri, &$params) {
         // Преобразование шаблона в регулярное выражение
-        $pattern = preg_replace('/\{([^}]+)\}/', '([^/]+)', $pattern);
-        $pattern = '#^' . $pattern . '$#';
+        $regexPattern = preg_replace('/\{([^}]+)\}/', '([^/]+)', $pattern);
+        $regexPattern = '#^' . $regexPattern . '$#';
         
-        if (preg_match($pattern, $requestUri, $matches)) {
+        error_log("Router: Matching pattern '$pattern' against URI '$requestUri' as regex '$regexPattern'");
+        
+        if (preg_match($regexPattern, $requestUri, $matches)) {
+            error_log("Router: Pattern matched! Matches: " . json_encode($matches));
             // Удаление первого элемента (полное совпадение)
             array_shift($matches);
             $params = $matches;
             return true;
         }
         
+        error_log("Router: Pattern did not match");
         return false;
     }
     
