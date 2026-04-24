@@ -62,7 +62,7 @@ if (defined('ENVIRONMENT') && ENVIRONMENT === 'development') {
     define('DB_NAME', 'p-351366_new-css-learn');
     define('DB_USER', 'p-351366_new-css-learn');
     define('DB_PASS', 'Anna-140275'); // Замените на реальный пароль от БД
-    define('APP_URL', 'https://bod-hub.kz'); // Замените https://bod-hub.kz на ваш домен
+    define('APP_URL', 'https://bod-hub.kz/new-css-learn'); 
 }
 
 // Параметры базы данных

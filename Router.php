@@ -40,8 +40,8 @@ class Router {
         // Удаление слешей в начале и конце
         $requestUri = trim($requestUri, '/');
         
-        // Если пустой запрос - главная страница
-        if (empty($requestUri)) {
+        // Если пустой запрос или имя поддиректории - главная страница
+        if (empty($requestUri) || $requestUri === 'new-css-learn') {
             $requestUri = 'home';
         }
         

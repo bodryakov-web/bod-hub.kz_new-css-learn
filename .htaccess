@@ -4,8 +4,8 @@
 # Включение механизма URL rewriting
 RewriteEngine On
 
-# Установка базовой директории (автоопределение)
-RewriteBase /
+# Установка базовой директории для поддиректории
+RewriteBase /new-css-learn/
 
 # Прямой доступ к существующим файлам и директориям
 RewriteCond %{REQUEST_FILENAME} -f [OR]
