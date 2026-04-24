@@ -9,9 +9,10 @@ if (!defined('NEW_CSS_LEARN')) {
     exit('Прямой доступ запрещен');
 }
 
-// Проверка авторизации
-if (!Router::isAdmin()) {
-    Router::redirect(Router::getAdminUrl() . '/login');
+// Проверка авторизации (кроме страницы логина)
+$currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+if (!Router::isAdmin() && $currentPath !== '/bod/login') {
+    Router::redirect('/bod/login');
 }
 
 $currentTheme = getCurrentTheme();
@@ -31,12 +32,12 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - Админ-панель' : 'А
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <!-- Подключение CSS стилей -->
-    <link rel="stylesheet" href="assets/css/main.css">
-    <link rel="stylesheet" href="assets/css/admin.css">
-    <link rel="stylesheet" href="assets/css/themes.css">
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/themes.css">
     
     <!-- Иконка сайта -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
+    <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
 </head>
 <body class="admin-body">
     <!-- Шапка админ-панели -->

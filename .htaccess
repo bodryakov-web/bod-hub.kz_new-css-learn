@@ -4,8 +4,8 @@
 # Включение механизма URL rewriting
 RewriteEngine On
 
-# Установка базовой директории для поддиректории
-RewriteBase /new-css-learn/
+# RewriteBase не используется - правила работают универсально
+# как для локальной разработки (корень), так и для хостинга (поддиректория)
 
 # Прямой доступ к существующим файлам и директориям
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -26,6 +26,9 @@ RewriteRule ^bod/upload/?$ admin/upload.php [L]
 
 # Правила для загрузки изображений
 RewriteRule ^uploads/([0-9]+)/images/(.+)$ uploads/$1/images/$2 [L]
+
+# Прямой доступ к assets директории (CSS, JS, изображения)
+RewriteRule ^assets/ - [L]
 
 # Все остальные запросы перенаправляем на index.php
 RewriteRule ^(.*)$ index.php [L]

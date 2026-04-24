@@ -13,7 +13,7 @@ if (!defined('NEW_CSS_LEARN')) {
 $pageTitle = $lesson['title_ru'];
 $pageDescription = 'Урок ' . $lesson['lesson_order'] . ' из раздела "' . $section['title_ru'] . '"';
 $pageHeader = $lesson['title_ru'];
-$requireQuiz = !empty($lessonContent['tests']);
+$requireQuiz = !empty($lessonContent) && !empty($lessonContent['tests']);
 
 // Подключение шапки
 require_once TEMPLATES_PATH . 'header.php';
@@ -37,12 +37,18 @@ require_once TEMPLATES_PATH . 'header.php';
     <!-- Секция теоретического материала -->
     <section class="lesson-section lesson-section--theory" id="theory">
         <div class="lesson-section__content">
-            <?php echo $lessonContent['theory']; ?>
+            <?php 
+            if (isset($lessonContent['theory'])) {
+                echo $lessonContent['theory'];
+            } else {
+                echo '<p class="error-message">Контент урока暂时 недоступен. Пожалуйста, попробуйте позже.</p>';
+            }
+            ?>
         </div>
     </section>
 
     <!-- Секция тестирования -->
-    <?php if (!empty($lessonContent['tests'])): ?>
+    <?php if (!empty($lessonContent) && !empty($lessonContent['tests'])): ?>
     <section class="lesson-section lesson-section--quiz" id="quiz">
         <h2 class="lesson-section__title">Тестирование</h2>
         <div class="quiz-container" data-quiz-id="<?php echo (int)$lesson['id']; ?>">
@@ -100,7 +106,7 @@ require_once TEMPLATES_PATH . 'header.php';
     <?php endif; ?>
 
     <!-- Секция задач -->
-    <?php if (!empty($lessonContent['tasks'])): ?>
+    <?php if (!empty($lessonContent) && !empty($lessonContent['tasks'])): ?>
     <section class="lesson-section lesson-section--tasks" id="tasks">
         <h2 class="lesson-section__title">Задачи</h2>
         <div class="tasks-container">

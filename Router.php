@@ -175,7 +175,7 @@ class Router {
      */
     public static function requireAdmin() {
         if (!self::isAdmin()) {
-            self::redirect(self::getAdminUrl() . '/login');
+            self::redirect('/bod/login');
         }
     }
     

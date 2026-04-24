@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест CSS</title>
+    <link rel="stylesheet" href="/bod/assets/css/main.css">
+    <link rel="stylesheet" href="/bod/assets/css/admin.css">
+    <link rel="stylesheet" href="/bod/assets/css/themes.css">
+</head>
+<body>
+    <h1>Тест загрузки CSS</h1>
+    <p>Если стили загрузились, фон будет соответствовать теме.</p>
+    
+    <div class="admin-header">
+        <h2>Это должен быть стилизованный заголовок админ-панели</h2>
+    </div>
+    
+    <div class="login-card">
+        <h3>Карточка входа</h3>
+        <p>Если стили admin.css загрузились, это будет выглядеть как карточка.</p>
+    </div>
+    
+    <script>
+        console.log('CSS файлы должны быть загружены');
+        // Проверяем, загрузились ли CSS файлы
+        window.onload = function() {
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            links.forEach((link, index) => {
+                console.log(`CSS файл ${index + 1}: ${link.href}`);
+            });
+        };
+    </script>
+</body>
+</html>

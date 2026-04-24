@@ -4,10 +4,25 @@
  * Завершает сессию администратора и перенаправляет на страницу входа
  */
 
-// Предотвращение прямого доступа
+// Определяем константу для безопасности, если она не определена
 if (!defined('NEW_CSS_LEARN')) {
-    exit('Прямой доступ запрещен');
+    define('NEW_CSS_LEARN', true);
 }
+
+// Подключение конфигурации
+require_once '../config.php';
+
+// Запуск сессии
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Подключение вспомогательных функций
+require_once '../functions.php';
+
+// Подключение классов
+require_once '../Database.php';
+require_once '../Router.php';
 
 // Завершение сессии администратора
 session_unset();
