@@ -16,8 +16,8 @@ services:
       - db  # Зависимость от сервиса базы данных
     environment:
       DB_HOST: db  # Хост базы данных (имя сервиса)
-      DB_NAME: p-351366_php-docker  # Имя базы данных
-      DB_USER: p-351366_php-docker  # Пользователь базы данных
+      DB_NAME: p-351366_new-css-learn  # Имя базы данных
+      DB_USER: p-351366_new-css-learn  # Пользователь базы данных
       DB_PASS: Anna-140275  # Пароль базы данных
     networks:
       - app-network  # Подключение к общей сети
@@ -27,8 +27,8 @@ services:
     image: mysql:8.0.34  # Образ MySQL версии 8.0.34
     environment:
       MYSQL_ROOT_PASSWORD: root  # Пароль root пользователя MySQL
-      MYSQL_DATABASE: p-351366_php-docker  # Создание базы данных при старте
-      MYSQL_USER: p-351366_php-docker  # Создание пользователя
+      MYSQL_DATABASE: p-351366_new-css-learn  # Создание базы данных при старте
+      MYSQL_USER: p-351366_new-css-learn  # Создание пользователя
       MYSQL_PASSWORD: Anna-140275  # Пароль пользователя
       MYSQL_INITDB_SKIP_TZINFO: 1  # Пропуск инициализации часовых поясов для ускорения
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci

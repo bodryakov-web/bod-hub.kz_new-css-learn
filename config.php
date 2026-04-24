@@ -21,8 +21,8 @@ date_default_timezone_set('Europe/Moscow');
 
 // Параметры подключения к базе данных
 define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
-define('DB_NAME', $_ENV['DB_NAME'] ?? 'p-351366_php-docker');
-define('DB_USER', $_ENV['DB_USER'] ?? 'p-351366_php-docker');
+define('DB_NAME', $_ENV['DB_NAME'] ?? 'p-351366_new-css-learn');
+define('DB_USER', $_ENV['DB_USER'] ?? 'p-351366_new-css-learn');
 define('DB_PASS', $_ENV['DB_PASS'] ?? 'Anna-140275');
 define('DB_CHARSET', 'utf8mb4');
 
