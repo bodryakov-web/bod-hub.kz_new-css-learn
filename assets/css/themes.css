@@ -1,0 +1,503 @@
+/**
+ * Стили для темной темы NewCSSLearn
+ * Перекрывает переменные CSS для темного режима
+ */
+
+/* Темная тема */
+[data-theme="dark"] {
+  /* Цветовая схема */
+  --color-primary: #60a5fa;
+  --color-primary-dark: #3b82f6;
+  --color-primary-light: #93c5fd;
+  --color-secondary: #94a3b8;
+  --color-accent: #22d3ee;
+  
+  /* Текстовые цвета */
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #0f172a;
+  
+  /* Фоновые цвета */
+  --color-background: #0f172a;
+  --color-surface: #1e293b;
+  --color-surface-hover: #334155;
+  --color-surface-active: #475569;
+  
+  /* Границы и разделители */
+  --color-border: #334155;
+  --color-border-light: #475569;
+  --color-border-dark: #1e293b;
+  
+  /* Статусные цвета */
+  --color-success: #10b981;
+  --color-success-light: #064e3b;
+  --color-warning: #f59e0b;
+  --color-warning-light: #451a03;
+  --color-error: #ef4444;
+  --color-error-light: #7f1d1d;
+  --color-info: #3b82f6;
+  --color-info-light: #1e3a8a;
+  
+  /* Тени для темной темы */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Специфичные стили для темной темы */
+[data-theme="dark"] .header {
+  background-color: rgba(30, 41, 59, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+[data-theme="dark"] .header__title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .theme-toggle {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .breadcrumbs {
+  background-color: var(--color-surface);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .section-card {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-md);
+}
+
+[data-theme="dark"] .section-card:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-xl);
+}
+
+[data-theme="dark"] .lesson-link {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .lesson-link:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .lesson-link__order {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .lesson-link:hover .lesson-link__order {
+  color: var(--color-text-inverse);
+}
+
+[data-theme="dark"] .course-info__card {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .course-info__card:hover {
+  border-color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .button--secondary {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .button--secondary:hover:not(:disabled) {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .badge--primary {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+[data-theme="dark"] .badge--secondary {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .badge--info {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+[data-theme="dark"] .status-badge--published {
+  background-color: var(--color-success-light);
+  color: var(--color-success);
+}
+
+[data-theme="dark"] .status-badge--draft {
+  background-color: var(--color-warning-light);
+  color: var(--color-warning);
+}
+
+[data-theme="dark"] .footer {
+  background-color: var(--color-surface);
+  border-top-color: var(--color-border);
+}
+
+/* Стили для страниц уроков в темной теме */
+[data-theme="dark"] .lesson-section {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+[data-theme="dark"] .lesson-section__title {
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .quiz-question {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+[data-theme="dark"] .quiz-question__title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .quiz-question__text {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .quiz-answer {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .quiz-answer:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .quiz-answer--correct {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+[data-theme="dark"] .quiz-answer--incorrect {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+[data-theme="dark"] .task-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+[data-theme="dark"] .task-card__title {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .lesson-navigation {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+}
+
+[data-theme="dark"] .lesson-navigation__button {
+  background-color: var(--color-surface-hover);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .lesson-navigation__button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .lesson-navigation__button--primary {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .lesson-navigation__button--primary:hover {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+}
+
+/* Стили для 404 страницы в темной теме */
+[data-theme="dark"] .error-page {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .error-page__title {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .error-page__subtitle {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .error-page__link {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .error-page__link:hover {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border-dark);
+}
+
+/* Плавные переходы для смены темы */
+*, *::before, *::after {
+  transition: 
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+/* Исключения для плавных переходов */
+*, *::before, *::after {
+  transition-property: 
+    background-color,
+    border-color,
+    color,
+    box-shadow,
+    fill,
+    stroke;
+  transition-duration: var(--transition-normal);
+  transition-timing-function: ease;
+}
+
+/* Элементы, которые не должны анимироваться при смене темы */
+.no-theme-transition,
+.no-theme-transition *,
+.theme-toggle,
+.theme-toggle * {
+  transition: none !important;
+}
+
+/* Применяем переходы после загрузки страницы */
+body.loaded *, 
+body.loaded *::before, 
+body.loaded *::after {
+  transition: 
+    background-color var(--transition-normal),
+    border-color var(--transition-normal),
+    color var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+/* Улучшение контрастности в темной теме */
+[data-theme="dark"] img {
+  opacity: 0.9;
+  border-radius: var(--radius-md);
+}
+
+[data-theme="dark"] img:hover {
+  opacity: 1;
+}
+
+/* Стили для кода в темной теме */
+[data-theme="dark"] pre,
+[data-theme="dark"] code {
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-dark);
+}
+
+[data-theme="dark"] pre {
+  background-color: var(--color-surface-active);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  overflow-x: auto;
+}
+
+[data-theme="dark"] code {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+}
+
+/* Стили для таблиц в темной теме */
+[data-theme="dark"] .admin-table {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .admin-table__header {
+  background-color: var(--color-surface-hover);
+  color: var(--color-text-primary);
+  border-bottom-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .admin-table__row {
+  border-bottom-color: var(--color-border);
+}
+
+[data-theme="dark"] .admin-table__row:hover {
+  background-color: var(--color-surface-hover);
+}
+
+[data-theme="dark"] .admin-table__cell {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .admin-table__code {
+  background-color: var(--color-surface-active);
+  color: var(--color-text-primary);
+  border-color: var(--color-border-dark);
+}
+
+/* Стили для форм в темной теме */
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .form-textarea {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .form-input:focus,
+[data-theme="dark"] .form-select:focus,
+[data-theme="dark"] .form-textarea:focus {
+  background-color: var(--color-background);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+[data-theme="dark"] .form-label {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .form-help {
+  color: var(--color-text-muted);
+}
+
+/* Стили для уведомлений в темной теме */
+[data-theme="dark"] .admin-message {
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .admin-message--success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+[data-theme="dark"] .admin-message--error {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+[data-theme="dark"] .notification {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-xl);
+}
+
+[data-theme="dark"] .notification--success {
+  background-color: var(--color-success-light);
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+[data-theme="dark"] .notification--error {
+  background-color: var(--color-error-light);
+  border-color: var(--color-error);
+  color: var(--color-error);
+}
+
+/* Стили для Quill редактора в темной теме */
+[data-theme="dark"] .ql-toolbar {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .ql-container {
+  background-color: var(--color-background);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .ql-editor {
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .ql-editor.ql-blank::before {
+  color: var(--color-text-muted);
+}
+
+/* Стили для подсказок в темной теме */
+[data-theme="dark"] .tooltip {
+  background-color: var(--color-surface-active);
+  border: 1px solid var(--color-border-dark);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Стили для модальных окон в темной теме */
+[data-theme="dark"] .modal {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .modal-backdrop {
+  background-color: rgba(15, 23, 42, 0.8);
+}
+
+/* Стили для загрузчика в темной теме */
+[data-theme="dark"] .loading-spinner {
+  border-color: var(--color-border);
+  border-top-color: var(--color-primary);
+}
+
+/* Улучшение доступности в темной теме */
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] *,
+  [data-theme="dark"] *::before,
+  [data-theme="dark"] *::after {
+    transition: none !important;
+  }
+}
+
+/* Высокая контрастность в темной теме */
+@media (prefers-contrast: high) {
+  [data-theme="dark"] {
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #e2e8f0;
+    --color-surface: #000000;
+    --color-surface-hover: #1a1a1a;
+    --color-border: #404040;
+  }
+}

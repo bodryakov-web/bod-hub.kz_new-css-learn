@@ -1,0 +1,72 @@
+# Файл конфигурации Apache для NewCSSLearn
+# Настраивает URL rewriting для роутинга
+
+# Включение механизма URL rewriting
+RewriteEngine On
+
+# Установка базовой директории
+RewriteBase /
+
+# Прямой доступ к существующим файлам и директориям
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Правила для админ-панели
+RewriteRule ^bod/?$ admin/index.php [L]
+RewriteRule ^bod/login/?$ admin/login.php [L]
+RewriteRule ^bod/logout/?$ admin/logout.php [L]
+RewriteRule ^bod/sections/?$ admin/sections.php [L]
+RewriteRule ^bod/lessons/?$ admin/lessons.php [L]
+RewriteRule ^bod/section/edit/([0-9]+)/?$ admin/edit-section.php?id=$1 [L]
+RewriteRule ^bod/section/new/?$ admin/edit-section.php [L]
+RewriteRule ^bod/lesson/edit/([0-9]+)/?$ admin/edit-lesson.php?id=$1 [L]
+RewriteRule ^bod/lesson/new/?$ admin/edit-lesson.php [L]
+RewriteRule ^bod/upload/?$ admin/upload.php [L]
+
+# Правила для загрузки изображений
+RewriteRule ^uploads/([0-9]+)/images/(.+)$ uploads/$1/images/$2 [L]
+
+# Все остальные запросы перенаправляем на index.php
+RewriteRule ^(.*)$ index.php [L]
+
+# Установка кодировки
+AddDefaultCharset UTF-8
+AddType 'text/html; charset=UTF-8' .html
+
+# Защита от доступа к системным файлам
+<Files ~ "^\.">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ~ "^(config|functions|Database|Router)\.php$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Настройка кэширования статических файлов
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+</IfModule>
+
+# Сжатие статических файлов
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
