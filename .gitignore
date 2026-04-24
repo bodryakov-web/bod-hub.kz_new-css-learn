@@ -1,0 +1,8 @@
+# Каталоги для игнорирования
+.db_init/
+.debug/
+.docs/
+
+# Docker файлы
+docker-compose.yml
+Dockerfile

@@ -1,0 +1,5 @@
+Команда запуска приложения:
+docker compose up
+
+Команда остановки приложения:
+docker compose down
