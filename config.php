@@ -12,14 +12,21 @@ if (!defined('NEW_CSS_LEARN')) {
 // Установка кодировки для корректной работы с кириллицей
 mb_internal_encoding('UTF-8');
 
-// Настройки вывода ошибок (для разработки)
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Настройки вывода ошибок (для производства)
+if (defined('ENVIRONMENT') && ENVIRONMENT === 'development') {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+} else {
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+    ini_set('error_log', __DIR__ . '/error.log');
+}
 
 // Установка временной зоны
-date_default_timezone_set('Europe/Moscow');
+date_default_timezone_set('Asia/Almaty');
 
-// Параметры подключения к базе данных
+// Параметры подключения к базе данных (для Hoster.kz)
 define('DB_HOST', $_ENV['DB_HOST'] ?? 'localhost');
 define('DB_NAME', $_ENV['DB_NAME'] ?? 'p-351366_new-css-learn');
 define('DB_USER', $_ENV['DB_USER'] ?? 'p-351366_new-css-learn');
@@ -28,7 +35,7 @@ define('DB_CHARSET', 'utf8mb4');
 
 // Параметры приложения
 define('APP_NAME', 'NewCSSLearn');
-define('APP_URL', 'http://localhost:8080');
+define('APP_URL', $_ENV['APP_URL'] ?? 'https://bod-hub.kz');
 define('UPLOADS_PATH', __DIR__ . '/uploads/lessons/');
 define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
 

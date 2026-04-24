@@ -1,10 +1,10 @@
 # Файл конфигурации Apache для NewCSSLearn
-# Настраивает URL rewriting для роутинга
+# Настройки для производственного хостинга Hoster.kz
 
 # Включение механизма URL rewriting
 RewriteEngine On
 
-# Установка базовой директории
+# Установка базовой директории (автоопределение)
 RewriteBase /
 
 # Прямой доступ к существующим файлам и директориям
@@ -36,14 +36,28 @@ AddType 'text/html; charset=UTF-8' .html
 
 # Защита от доступа к системным файлам
 <Files ~ "^\.">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </Files>
 
 <Files ~ "^(config|functions|Database|Router)\.php$">
-    Order allow,deny
-    Deny from all
+    Require all denied
 </Files>
+
+# Защита от доступа к конфигурационным файлам
+<FilesMatch "\.(env|log|ini|conf)$">
+    Require all denied
+</FilesMatch>
+
+# Отключение просмотра каталогов
+Options -Indexes
+
+# Защита от XSS атак
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
 
 # Настройка кэширования статических файлов
 <IfModule mod_expires.c>
