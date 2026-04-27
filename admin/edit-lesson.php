@@ -50,6 +50,39 @@ if (isset($_GET['id'])) {
     } else {
         $isEdit = true;
         $lessonContent = jsonDecode($lesson['content']);
+        
+        // Проверка доступа к редактированию урока только через раздел
+        // Если это не создание нового урока и нет параметра section, проверяем реферер
+        if (!isset($_GET['section']) && !isset($_SERVER['HTTP_REFERER'])) {
+            // Прямой доступ без реферера - разрешаем только если это внутренний переход
+            $allowedReferers = [
+                'lessons.php',
+                'index.php'
+            ];
+            
+            $refererFound = false;
+            if (isset($_SERVER['HTTP_REFERER'])) {
+                foreach ($allowedReferers as $allowedReferer) {
+                    if (strpos($_SERVER['HTTP_REFERER'], $allowedReferer) !== false) {
+                        $refererFound = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (!$refererFound) {
+                // Перенаправляем на страницу уроков раздела
+                header('Location: /bod/lessons/' . $lesson['section_id']);
+                exit;
+            }
+        }
+    }
+} else {
+    // Для создания нового урока проверяем, что есть параметр section
+    if (!isset($_GET['section'])) {
+        // Перенаправляем на главную страницу админки, если нет параметра section
+        header('Location: /bod/');
+        exit;
     }
 }
 
@@ -155,8 +188,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $messageType = 'success';
             
-            // Перенаправление на список уроков
-            header('Location: lessons.php?message=' . urlencode($message) . '&type=' . $messageType);
+            // Перенаправление на список уроков раздела
+            $targetSectionId = $isEdit ? $lesson['section_id'] : $sectionId;
+            header('Location: /bod/lessons/' . $targetSectionId . '?message=' . urlencode($message) . '&type=' . $messageType);
             exit;
             
         } catch (Exception $e) {
@@ -214,7 +248,15 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                     <option value="">Выберите раздел</option>
                     <?php foreach ($sections as $section): ?>
                         <option value="<?php echo (int)$section['id']; ?>" 
-                                <?php echo (isset($lesson['section_id']) && $lesson['section_id'] == $section['id']) ? 'selected' : ''; ?>>
+                                <?php 
+                                $selected = false;
+                                if (isset($lesson['section_id']) && $lesson['section_id'] == $section['id']) {
+                                    $selected = true;
+                                } elseif (isset($_GET['section']) && (int)$_GET['section'] == $section['id']) {
+                                    $selected = true;
+                                }
+                                echo $selected ? 'selected' : ''; 
+                                ?>>
                             <?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?>
                         </option>
                     <?php endforeach; ?>
@@ -422,7 +464,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
         
         <!-- Кнопки действий -->
         <div class="form-actions">
-            <a href="lessons.php" class="button button--secondary">
+            <a href="<?php echo isset($_GET['section']) ? '/bod/lessons/' . (int)$_GET['section'] : ($isEdit ? '/bod/lessons/' . $lesson['section_id'] : '/bod/'); ?>" class="button button--secondary">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

@@ -55,46 +55,6 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - Админ-панель' : 'А
                 <!-- Навигационное меню -->
                 <nav class="admin-nav" aria-label="Основная навигация">
                     <ul class="admin-nav__list">
-                        <li class="admin-nav__item">
-                            <a href="<?php echo Router::getAdminUrl(); ?>" 
-                               class="admin-nav__link <?php echo basename($_SERVER['PHP_SELF']) === 'index.php' ? 'admin-nav__link--active' : ''; ?>">
-                                <span class="admin-nav__icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                        <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                        <rect x="14" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                        <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                    </svg>
-                                </span>
-                                <span class="admin-nav__text">Главная</span>
-                            </a>
-                        </li>
-                        <li class="admin-nav__item">
-                            <a href="sections.php" 
-                               class="admin-nav__link <?php echo basename($_SERVER['PHP_SELF']) === 'sections.php' ? 'admin-nav__link--active' : ''; ?>">
-                                <span class="admin-nav__icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                                <span class="admin-nav__text">Разделы</span>
-                            </a>
-                        </li>
-                        <li class="admin-nav__item">
-                            <a href="lessons.php" 
-                               class="admin-nav__link <?php echo basename($_SERVER['PHP_SELF']) === 'lessons.php' ? 'admin-nav__link--active' : ''; ?>">
-                                <span class="admin-nav__icon">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <polyline points="14,2 14,8 20,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <line x1="16" y1="13" x2="8" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <line x1="16" y1="17" x2="8" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <polyline points="10,9 9,9 8,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    </svg>
-                                </span>
-                                <span class="admin-nav__text">Уроки</span>
-                            </a>
-                        </li>
                     </ul>
                 </nav>
             </div>

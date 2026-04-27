@@ -24,7 +24,7 @@ mb_internal_encoding('UTF-8');
 
 // Определение окружения (для хостинга всегда production)
 // Для локальной разработки через Docker раскомментируйте следующую строку
-//define('ENVIRONMENT', 'development');
+define('ENVIRONMENT', 'development');
 
 
 

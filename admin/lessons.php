@@ -33,8 +33,29 @@ $db = Database::getInstance();
 $message = '';
 $messageType = '';
 
+// Проверка сообщений из GET параметров
+if (isset($_GET['message']) && isset($_GET['type'])) {
+    $message = htmlspecialchars($_GET['message'], ENT_QUOTES, 'UTF-8');
+    $messageType = htmlspecialchars($_GET['type'], ENT_QUOTES, 'UTF-8');
+}
+
 // Фильтрация по разделу
 $sectionFilter = isset($_GET['section']) ? (int)$_GET['section'] : null;
+
+// Проверка доступа к списку уроков
+if (!$sectionFilter) {
+    // Если нет параметра section, перенаправляем на главную страницу админки
+    header('Location: /bod/');
+    exit;
+}
+
+// Получение информации о разделе
+$section = $db->fetch("SELECT * FROM sections WHERE id = ?", [$sectionFilter]);
+if (!$section) {
+    $message = 'Раздел не найден';
+    $messageType = 'error';
+    $sectionFilter = null;
+}
 
 // Обработка действий (удаление, публикация)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
@@ -103,9 +124,9 @@ $sql .= " ORDER BY s.section_order ASC, l.lesson_order ASC";
 $lessons = $db->fetchAll($sql, $params);
 
 // Установка мета-данных
-$pageTitle = 'Управление уроками';
-$pageDescription = 'Создание, редактирование и удаление уроков курса';
-$pageHeader = 'Уроки курса';
+$pageTitle = 'Уроки раздела';
+$pageDescription = 'Управление уроками раздела курса';
+$pageHeader = $section ? 'Уроки раздела: ' . htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8') : 'Уроки';
 $isAdmin = true;
 
 // Подключение шапки админ-панели
@@ -134,33 +155,39 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
     </div>
 <?php endif; ?>
 
-<!-- Панель действий и фильтров -->
+<!-- Панель действий и навигации -->
 <div class="admin-filters">
     <div class="admin-filters__left">
-        <a href="edit-lesson.php" class="button button--primary">
-            <span class="button__icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            Добавить урок
-        </a>
+        <?php if ($section): ?>
+            <a href="/bod/" class="button button--outline">
+                <span class="button__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                К разделам
+            </a>
+            
+            <a href="/bod/lesson/new/<?php echo (int)$section['id']; ?>" class="button button--primary">
+                <span class="button__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="5" y1="12" x2="19" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                Добавить урок
+            </a>
+        <?php endif; ?>
     </div>
     
     <div class="admin-filters__right">
-        <form method="GET" class="filter-form">
-            <label for="section" class="filter-label">Раздел:</label>
-            <select id="section" name="section" class="filter-select" onchange="this.form.submit()">
-                <option value="">Все разделы</option>
-                <?php foreach ($sections as $section): ?>
-                    <option value="<?php echo (int)$section['id']; ?>" 
-                            <?php echo $sectionFilter === $section['id'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </form>
+        <?php if ($section): ?>
+            <div class="section-info">
+                <span class="section-info__label">Текущий раздел:</span>
+                <span class="section-info__name"><?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?></span>
+            </div>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -204,7 +231,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                         </td>
                         <td class="admin-table__cell admin-table__cell--actions">
                             <div class="admin-table__actions">
-                                <a href="edit-lesson.php?id=<?php echo (int)$lesson['id']; ?>" 
+                                <a href="/bod/lesson/edit/<?php echo (int)$lesson['id']; ?>" 
                                    class="button button--small button--secondary"
                                    title="Редактировать урок">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -266,11 +293,11 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             </div>
             <h3 class="empty-state__title">Уроки не найдены</h3>
             <p class="empty-state__description">
-                <?php if ($sectionFilter): ?>
-                    В выбранном разделе пока нет уроков. 
-                    <a href="edit-lesson.php?section=<?php echo $sectionFilter; ?>">Создайте первый урок</a> в этом разделе.
+                <?php if ($section): ?>
+                    В разделе "<?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?>" пока нет уроков. 
+                    <a href="/bod/lesson/new/<?php echo (int)$section['id']; ?>">Создайте первый урок</a> в этом разделе.
                 <?php else: ?>
-                    В курсе пока нет уроков. <a href="edit-lesson.php">Создайте первый урок</a>, чтобы начать наполнение курса.
+                    Раздел не найден. <a href="/bod/">Вернуться к списку разделов</a>.
                 <?php endif; ?>
             </p>
         </div>

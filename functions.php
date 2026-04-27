@@ -365,4 +365,26 @@ function removeLessonImagesDirectory($lessonId) {
     
     return true;
 }
+
+/**
+ * Склонение числительных в русском языке
+ * @param int $number Число
+ * @param array $words Массив слов [1, 2, 5] например: ['урок', 'урока', 'уроков']
+ * @return string Правильное слово
+ */
+function getNumWord($number, $words) {
+    $number = abs($number);
+    $tens = $number % 100;
+    $units = $number % 10;
+    
+    if ($tens >= 11 && $tens <= 14) {
+        return $words[2];
+    } elseif ($units === 1) {
+        return $words[0];
+    } elseif ($units >= 2 && $units <= 4) {
+        return $words[1];
+    } else {
+        return $words[2];
+    }
+}
 ?>
