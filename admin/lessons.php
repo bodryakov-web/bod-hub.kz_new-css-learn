@@ -181,12 +181,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
     </div>
     
     <div class="admin-filters__right">
-        <?php if ($section): ?>
-            <div class="section-info">
-                <span class="section-info__label">Текущий раздел:</span>
-                <span class="section-info__name"><?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?></span>
-            </div>
-        <?php endif; ?>
     </div>
 </div>
 

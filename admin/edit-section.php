@@ -156,9 +156,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        value="<?php echo htmlspecialchars($section['title_ru'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                        required 
                        placeholder="Например: Основы современного CSS">
-                <div class="form-help">
-                    Название раздела будет отображаться на главной странице курса
-                </div>
             </div>
             
             <div class="form-group">
@@ -171,9 +168,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        required 
                        pattern="[a-z-]+"
                        placeholder="osnovy-sovremennogo-css">
-                <div class="form-help">
-                    URL-псевдоним раздела. Только маленькие английские буквы и дефисы. Будет использоваться в URL адресе.
-                </div>
             </div>
             
             <div class="form-group">
@@ -186,9 +180,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        required 
                        min="1"
                        placeholder="1">
-                <div class="form-help">
-                    Порядок отображения раздела на главной странице. Уникальное значение.
-                </div>
             </div>
         </div>
         

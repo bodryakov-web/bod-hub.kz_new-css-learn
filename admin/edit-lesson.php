@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Установка мета-данных
 $pageTitle = $isEdit ? 'Редактирование урока' : 'Создание урока';
-$pageDescription = $isEdit ? 'Изменение данных урока' : 'Добавление нового урока в курс';
+$pageDescription = $isEdit ? '' : 'Dobavlenie novogo uroka v kurs';
 $pageHeader = $isEdit ? 'Редактирование урока' : 'Новый урок';
 $isAdmin = true;
 
@@ -321,14 +321,11 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             <h3 class="form-section__title">Теоретический материал</h3>
             
             <div class="form-group">
-                <label for="theory" class="form-label">Содержание урока *</label>
+                <label for="theory" class="form-label"></label>
                 <div id="editor" style="height: 400px;">
                     <?php echo $lessonContent['theory'] ?? ''; ?>
                 </div>
                 <input type="hidden" name="theory" id="theory" value="<?php echo htmlspecialchars($lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                <div class="form-help">
-                    Используйте текстовый редактор для форматирования содержания урока.
-                </div>
             </div>
         </div>
         
@@ -385,7 +382,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                             </label>
                         </div>
                         <?php endfor; ?>
-                        <div class="form-help">Отметьте правильный ответ, выбрав радиокнопку слева от варианта</div>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -485,7 +481,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 Сохранить черновик
             </button>
             
-            <button type="submit" class="button button--primary">
+            <button type="submit" class="button button--primary" onclick="publishLesson()">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -493,7 +489,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                         <polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <?php echo $isEdit ? 'Сохранить изменения' : 'Создать урок'; ?>
+                <?php echo $isEdit ? 'Publish' : 'Publish'; ?>
             </button>
         </div>
     </form>
@@ -591,7 +587,6 @@ function addTest() {
                         </label>
                     </div>
                 `).join('')}
-                <div class="form-help">Отметьте правильный ответ, выбрав радиокнопку слева от варианта</div>
             </div>
         </div>
     `;
@@ -672,6 +667,12 @@ function removeTask(index) {
 // Функция сохранения черновика
 function saveDraft() {
     document.querySelector('input[name="is_published"]').checked = false;
+    document.getElementById('lessonForm').submit();
+}
+
+// Функция публикации урока
+function publishLesson() {
+    document.querySelector('input[name="is_published"]').checked = true;
     document.getElementById('lessonForm').submit();
 }
 </script>
