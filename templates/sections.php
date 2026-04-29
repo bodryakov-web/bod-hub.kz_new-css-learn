@@ -85,48 +85,6 @@ require_once TEMPLATES_PATH . 'header.php';
     <?php endif; ?>
 </div>
 
-<!-- Дополнительная информация о курсе -->
-<div class="course-info">
-    <div class="course-info__grid">
-        <div class="course-info__card">
-            <div class="course-info__icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <h3 class="course-info__title">Современный CSS</h3>
-            <p class="course-info__description">
-                Изучайте новейшие возможности CSS, появившиеся с 2017 года
-            </p>
-        </div>
-        
-        <div class="course-info__card">
-            <div class="course-info__icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <h3 class="course-info__title">Практические задания</h3>
-            <p class="course-info__description">
-                Применяйте знания на практике с интересными задачами
-            </p>
-        </div>
-        
-        <div class="course-info__card">
-            <div class="course-info__icon">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <h3 class="course-info__title">Тестирование знаний</h3>
-            <p class="course-info__description">
-                Проверяйте свои знания с помощью интерактивных тестов
-            </p>
-        </div>
-    </div>
-</div>
-
 <?php
 // Подключение подвала
 require_once TEMPLATES_PATH . 'footer.php';

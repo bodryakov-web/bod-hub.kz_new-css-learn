@@ -172,7 +172,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
 }
 
 [data-theme="dark"] .quiz-question__title {
@@ -180,7 +180,9 @@
 }
 
 [data-theme="dark"] .quiz-question__text {
-  color: var(--color-text-secondary);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
 }
 
 [data-theme="dark"] .quiz-answer {

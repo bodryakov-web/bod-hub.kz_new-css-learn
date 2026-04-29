@@ -17,10 +17,7 @@ if (!defined('NEW_CSS_LEARN')) {
         <div class="footer__container">
             <div class="footer__content">
                 <p class="footer__copyright">
-                    © <?php echo date('Y'); ?> <?php echo APP_NAME; ?> - Учебный курс по современному CSS
-                </p>
-                <p class="footer__description">
-                    Изучение новых возможностей CSS с 2017 года: Grid, Custom Properties, Container Queries и многое другое
+                    <?php echo date('Y'); ?> <?php echo APP_NAME; ?> - Учебный курс по современному CSS
                 </p>
             </div>
         </div>

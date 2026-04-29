@@ -516,7 +516,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 </span>
                 <?php echo $isEdit ? 'Publish' : 'Publish'; ?>
             </button>
-            <?php endif; ?>
         </div>
     </form>
 </div>

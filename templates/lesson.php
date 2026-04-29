@@ -30,7 +30,29 @@ require_once TEMPLATES_PATH . 'header.php';
             if (isset($lessonContent['theory'])) {
                 echo $lessonContent['theory'];
             } else {
-                echo '<p class="error-message">Контент урока暂时 недоступен. Пожалуйста, попробуйте позже.</p>';
+                echo '<div class="error-message" style="background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; margin: 20px 0;">';
+                echo '<h3> Kontent uroka nedostupen</h3>';
+                echo '<p><strong>Diagnosticheskaya informaciya:</strong></p>';
+                echo '<ul>';
+                echo '<li>Lesson ID: ' . htmlspecialchars($lesson['id'] ?? 'unknown') . '</li>';
+                echo '<li>Lesson Title: ' . htmlspecialchars($lesson['title_ru'] ?? 'unknown') . '</li>';
+                echo '<li>Lesson Slug: ' . htmlspecialchars($lesson['slug'] ?? 'unknown') . '</li>';
+                echo '<li>Section ID: ' . htmlspecialchars($section['id'] ?? 'unknown') . '</li>';
+                echo '<li>Section Title: ' . htmlspecialchars($section['title_ru'] ?? 'unknown') . '</li>';
+                echo '<li>Content available: ' . (isset($lessonContent) ? 'Yes' : 'No') . '</li>';
+                echo '<li>Content type: ' . gettype($lessonContent ?? null) . '</li>';
+                if (isset($lesson['content'])) {
+                    echo '<li>Raw content length: ' . strlen($lesson['content']) . ' characters</li>';
+                    $jsonError = json_last_error();
+                    if ($jsonError !== JSON_ERROR_NONE) {
+                        echo '<li>JSON Error: ' . json_last_error_msg() . '</li>';
+                    }
+                } else {
+                    echo '<li>Raw content: Not available</li>';
+                }
+                echo '</ul>';
+                echo '<p><strong>Reshenie:</strong> Zapustite skript <a href="/setup_lesson.php" style="color: #721c24;">setup_lesson.php</a> dlya sozdaniya testovyh dannyh.</p>';
+                echo '</div>';
             }
             ?>
         </div>
@@ -47,14 +69,6 @@ require_once TEMPLATES_PATH . 'header.php';
                         <h3 class="quiz-question__title">
                             Вопрос <?php echo $index + 1; ?>
                         </h3>
-                        <div class="quiz-question__result" data-result="pending">
-                            <span class="quiz-question__icon quiz-question__icon--pending">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                                    <text x="12" y="16" text-anchor="middle" font-size="12" fill="currentColor">?</text>
-                                </svg>
-                            </span>
-                        </div>
                     </div>
                     
                     <div class="quiz-question__content">
@@ -86,6 +100,15 @@ require_once TEMPLATES_PATH . 'header.php';
                                     </span>
                                 </label>
                             <?php endforeach; ?>
+                        </div>
+                        
+                        <div class="quiz-question__result" data-result="pending">
+                            <span class="quiz-question__icon quiz-question__icon--pending">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                    <text x="12" y="16" text-anchor="middle" font-size="12" fill="currentColor">?</text>
+                                </svg>
+                            </span>
                         </div>
                     </div>
                 </div>
