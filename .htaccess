@@ -6,6 +6,9 @@ RewriteEngine On
 
 # RewriteBase не используется - правила работают универсально
 # как для локальной разработки (корень), так и для хостинга (поддиректория)
+# RewriteBase para hosting em subdiretório /new-css-learn/
+# Para desenvolvimento local comente a linha abaixo
+RewriteBase /new-css-learn/
 
 # Прямой доступ к существующим файлам и директориям
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -15,8 +18,6 @@ RewriteRule ^ - [L]
 # Правила для админ-панели
 RewriteRule ^bod/?$ admin/index.php [L]
 RewriteRule ^bod/login/?$ admin/login.php [L]
-RewriteRule ^bod/logout/?$ admin/logout.php [L]
-RewriteRule ^bod/sections/?$ admin/sections.php [L]
 RewriteRule ^bod/lessons/?$ admin/lessons.php [L]
 RewriteRule ^bod/lessons/([0-9]+)/?$ admin/lessons.php?section=$1 [L]
 RewriteRule ^bod/section/edit/([0-9]+)/?$ admin/edit-section.php?id=$1 [L]
