@@ -188,14 +188,17 @@
 .admin-page-header__container {
   max-width: 1600px;
   margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  min-height: 72px;
 }
 
 .admin-page-header__title {
   font-size: var(--font-size-3xl);
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
+  margin: 0;
 }
 
 .admin-page-header__description {
