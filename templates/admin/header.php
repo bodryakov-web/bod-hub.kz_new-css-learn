@@ -110,10 +110,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - Админ-панель' : 'А
         <div class="admin-page-header">
             <div class="admin-page-header__container">
                 <h1 class="admin-page-header__title"><?php echo htmlspecialchars($pageHeader, ENT_QUOTES, 'UTF-8'); ?></h1>
-                <?php if (isset($pageDescription)): ?>
-                <p class="admin-page-header__description"><?php echo htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8'); ?></p>
-                <?php endif; ?>
-            </div>
+                            </div>
         </div>
         <?php endif; ?>
 

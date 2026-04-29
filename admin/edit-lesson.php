@@ -349,7 +349,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 <div id="editor" style="height: 400px;">
                     <?php echo $savedFormData['theory'] ?? $lessonContent['theory'] ?? ''; ?>
                 </div>
-                <input type="hidden" name="theory" id="theory" value="<?php echo htmlspecialchars($lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <input type="hidden" name="theory" id="theory" value="<?php echo htmlspecialchars($savedFormData['theory'] ?? $lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
             </div>
         </div>
         
@@ -429,9 +429,10 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             
             <div id="tasksContainer">
                 <?php 
-                $tasks = $lessonContent['tasks'] ?? [];
+                // Use saved tasks data if available, otherwise use lesson data
+                $tasks = $savedFormData['tasks'] ?? $lessonContent['tasks'] ?? [];
                 if (empty($tasks)) {
-                    // Добавляем одну пустую задачу для новых уроков
+                    // Add one empty task for new lessons
                     $tasks = [[]];
                 }
                 
@@ -525,7 +526,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
 <script>
-// Инициализация Quill редактора
+// Initialization of Quill editor
 var quill = new Quill('#editor', {
     theme: 'snow',
     placeholder: 'Напишите содержание урока...',
@@ -548,7 +549,13 @@ var quill = new Quill('#editor', {
     }
 });
 
-// Синхронизация содержимого редактора с hidden полем
+// Initialize editor content from hidden field (for form data restoration)
+var theoryHiddenField = document.getElementById('theory');
+if (theoryHiddenField && theoryHiddenField.value) {
+    quill.root.innerHTML = theoryHiddenField.value;
+}
+
+// Sync editor content with hidden field
 quill.on('text-change', function() {
     document.getElementById('theory').value = quill.root.innerHTML;
 });
@@ -570,8 +577,13 @@ document.querySelectorAll('.task-editor').forEach(function(element, index) {
         }
     });
     
+    // Initialize editor content from hidden field (for form data restoration)
+    var hiddenInput = document.querySelector('input[name="task_description_' + taskIndex + '"]');
+    if (hiddenInput && hiddenInput.value) {
+        taskEditors[taskIndex].root.innerHTML = hiddenInput.value;
+    }
+    
     taskEditors[taskIndex].on('text-change', function() {
-        var hiddenInput = document.querySelector('input[name="task_description_' + taskIndex + '"]');
         if (hiddenInput) {
             hiddenInput.value = taskEditors[taskIndex].root.innerHTML;
         }
