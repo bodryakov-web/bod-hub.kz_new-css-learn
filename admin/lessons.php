@@ -45,7 +45,7 @@ $sectionFilter = isset($_GET['section']) ? (int)$_GET['section'] : null;
 // Проверка доступа к списку уроков
 if (!$sectionFilter) {
     // Если нет параметра section, перенаправляем на главную страницу админки
-    header('Location: /bod/');
+    Router::redirect(Router::getAdminUrl());
     exit;
 }
 
@@ -158,7 +158,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 <div class="admin-filters">
     <div class="admin-filters__left">
         <?php if ($section): ?>
-            <a href="/bod/sections" class="button button--outline">
+            <a href="<?php echo Router::getSectionsUrl(); ?>" class="button button--outline">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -168,7 +168,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 К разделам
             </a>
             
-            <a href="/bod/lesson/new/<?php echo (int)$section['id']; ?>" class="button button--primary">
+            <a href="<?php echo Router::getNewLessonUrl($section['id']); ?>" class="button button--primary">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -224,7 +224,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                         </td>
                         <td class="admin-table__cell admin-table__cell--actions">
                             <div class="admin-table__actions">
-                                <a href="/bod/lesson/edit/<?php echo (int)$lesson['id']; ?>" 
+                                <a href="<?php echo Router::getEditLessonUrl($lesson['id']); ?>" 
                                    class="button button--small button--secondary"
                                    title="Редактировать урок">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -288,9 +288,9 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             <p class="empty-state__description">
                 <?php if ($section): ?>
                     В разделе "<?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?>" пока нет уроков. 
-                    <a href="/bod/lesson/new/<?php echo (int)$section['id']; ?>">Создайте первый урок</a> в этом разделе.
+                    <a href="<?php echo Router::getNewLessonUrl($section['id']); ?>">Создайте первый урок</a> в этом разделе.
                 <?php else: ?>
-                    Раздел не найден. <a href="/bod/">Вернуться к списку разделов</a>.
+                    Раздел не найден. <a href="<?php echo Router::getAdminUrl(); ?>">Вернуться к списку разделов</a>.
                 <?php endif; ?>
             </p>
         </div>

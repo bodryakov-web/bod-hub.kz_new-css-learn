@@ -37,11 +37,18 @@ class Router {
         $requestUri = $_SERVER['REQUEST_URI'];
         $requestUri = parse_url($requestUri, PHP_URL_PATH);
         
-        // Удаление слешей в начале и конце
+        // Remove slashes at beginning and end
         $requestUri = trim($requestUri, '/');
         
-        // Если пустой запрос или имя поддиректории - главная страница
-        if (empty($requestUri) || $requestUri === 'new-css-learn') {
+        // Remove subdirectory prefix if it exists
+        $subdirectory = $this->getSubdirectory();
+        if ($subdirectory && strpos($requestUri, $subdirectory) === 0) {
+            $requestUri = substr($requestUri, strlen($subdirectory));
+            $requestUri = trim($requestUri, '/');
+        }
+        
+        // If empty request - main page
+        if (empty($requestUri)) {
             $requestUri = 'home';
         }
         
@@ -119,6 +126,66 @@ class Router {
     }
     
     /**
+     * Получение URL для разделов админ-панели
+     * @return string
+     */
+    public static function getSectionsUrl() {
+        return APP_URL . '/bod/sections';
+    }
+    
+    /**
+     * Получение URL для уроков админ-панели
+     * @param int $sectionId
+     * @return string
+     */
+    public static function getLessonsUrl($sectionId) {
+        return APP_URL . '/bod/lessons/' . (int)$sectionId;
+    }
+    
+    /**
+     * Получение URL для редактирования раздела
+     * @param int $sectionId
+     * @return string
+     */
+    public static function getEditSectionUrl($sectionId) {
+        return APP_URL . '/bod/section/edit/' . (int)$sectionId;
+    }
+    
+    /**
+     * Получение URL для создания нового раздела
+     * @return string
+     */
+    public static function getNewSectionUrl() {
+        return APP_URL . '/bod/section/new';
+    }
+    
+    /**
+     * Получение URL для редактирования урока
+     * @param int $lessonId
+     * @return string
+     */
+    public static function getEditLessonUrl($lessonId) {
+        return APP_URL . '/bod/lesson/edit/' . (int)$lessonId;
+    }
+    
+    /**
+     * Получение URL для создания нового урока
+     * @param int $sectionId
+     * @return string
+     */
+    public static function getNewLessonUrl($sectionId) {
+        return APP_URL . '/bod/lesson/new/' . (int)$sectionId;
+    }
+    
+    /**
+     * Получение URL для входа в админ-панель
+     * @return string
+     */
+    public static function getLoginUrl() {
+        return APP_URL . '/bod/login';
+    }
+    
+    /**
      * Парсинг URL урока для получения параметров
      * @param string $url URL урока
      * @return array|null Массив с section_order, section_slug, lesson_order, lesson_slug
@@ -175,7 +242,7 @@ class Router {
      */
     public static function requireAdmin() {
         if (!self::isAdmin()) {
-            self::redirect('/bod/login');
+            self::redirect(APP_URL . '/bod/login');
         }
     }
     
@@ -200,6 +267,31 @@ class Router {
         $host = $_SERVER['HTTP_HOST'];
         $uri = $_SERVER['REQUEST_URI'];
         return $protocol . '://' . $host . $uri;
+    }
+    
+    /**
+     * Получение имени подкаталога из APP_URL
+     * @return string|null
+     */
+    private function getSubdirectory() {
+        $appUrl = defined('APP_URL') ? APP_URL : '';
+        $parsedUrl = parse_url($appUrl);
+        
+        if (isset($parsedUrl['path'])) {
+            $path = trim($parsedUrl['path'], '/');
+            return !empty($path) ? $path : null;
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Получение базового пути для URL
+     * @return string
+     */
+    private function getBasePath() {
+        $subdirectory = $this->getSubdirectory();
+        return $subdirectory ? '/' . $subdirectory : '';
     }
 }
 ?>

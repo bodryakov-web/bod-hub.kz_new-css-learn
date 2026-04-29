@@ -41,7 +41,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 <!-- Список разделов -->
     <div class="admin-sections">
         <div class="admin-sections__header">
-            <a href="/bod/section/new/" class="button button--primary">
+            <a href="<?php echo Router::getNewSectionUrl(); ?>" class="button button--primary">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -99,7 +99,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                         </div>
                         
                         <div class="section-card__actions">
-                            <a href="/bod/lessons/<?php echo (int)$section['id']; ?>" 
+                            <a href="<?php echo Router::getLessonsUrl($section['id']); ?>" 
                                class="button button--small button--primary"
                                title="Управление уроками раздела">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -113,7 +113,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                             </a>
                             
                                                         
-                            <a href="/bod/section/edit/<?php echo (int)$section['id']; ?>" 
+                            <a href="<?php echo Router::getEditSectionUrl($section['id']); ?>" 
                                class="button button--small button--outline"
                                title="Редактировать раздел">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -137,7 +137,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 <p class="empty-state__description">
                     В курсе пока нет разделов. Создайте первый раздел, чтобы начать наполнение курса.
                 </p>
-                <a href="/bod/section/new/" class="button button--primary">
+                <a href="<?php echo Router::getNewSectionUrl(); ?>" class="button button--primary">
                     <span class="button__icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="12" y1="5" x2="12" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

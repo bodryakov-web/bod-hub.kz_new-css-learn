@@ -8,7 +8,7 @@ RewriteEngine On
 # как для локальной разработки (корень), так и для хостинга (поддиректория)
 # RewriteBase para hosting em subdiretório /new-css-learn/
 # Para desenvolvimento local comente a linha abaixo
-RewriteBase /new-css-learn/
+# RewriteBase /new-css-learn/
 
 # Прямой доступ к существующим файлам и директориям
 RewriteCond %{REQUEST_FILENAME} -f [OR]

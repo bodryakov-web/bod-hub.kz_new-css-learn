@@ -11,8 +11,9 @@ if (!defined('NEW_CSS_LEARN')) {
 
 // Проверка авторизации (кроме страницы логина)
 $currentPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if (!Router::isAdmin() && $currentPath !== '/bod/login') {
-    Router::redirect('/bod/login');
+$loginPath = parse_url(Router::getLoginUrl(), PHP_URL_PATH);
+if (!Router::isAdmin() && $currentPath !== $loginPath) {
+    Router::redirect(Router::getLoginUrl());
 }
 
 $currentTheme = getCurrentTheme();

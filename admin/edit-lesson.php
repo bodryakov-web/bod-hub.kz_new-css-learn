@@ -80,7 +80,7 @@ if (isset($_GET['id'])) {
             
             if (!$refererFound) {
                 // Перенаправляем на страницу уроков раздела
-                header('Location: /bod/lessons/' . $lesson['section_id']);
+                Router::redirect(Router::getLessonsUrl($lesson['section_id']));
                 exit;
             }
         }
@@ -89,7 +89,7 @@ if (isset($_GET['id'])) {
     // Для создания нового урока проверяем, что есть параметр section
     if (!isset($_GET['section'])) {
         // Перенаправляем на главную страницу админки, если нет параметра section
-        header('Location: /bod/');
+        Router::redirect(Router::getAdminUrl());
         exit;
     }
 }
@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             // Redirect to lessons list of the section
             $targetSectionId = $isEdit ? $lesson['section_id'] : $sectionId;
-            header('Location: /bod/lessons/' . $targetSectionId . '?message=' . urlencode($message) . '&type=' . $messageType);
+            Router::redirect(Router::getLessonsUrl($targetSectionId) . '?message=' . urlencode($message) . '&type=' . $messageType);
             exit;
             
         } catch (Exception $e) {
@@ -485,7 +485,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
         
         <!-- Кнопки действий -->
         <div class="form-actions">
-            <a href="<?php echo isset($_GET['section']) ? '/bod/lessons/' . (int)$_GET['section'] : ($isEdit ? '/bod/lessons/' . $lesson['section_id'] : '/bod/'); ?>" class="button button--secondary">
+            <a href="<?php echo isset($_GET['section']) ? Router::getLessonsUrl((int)$_GET['section']) : ($isEdit ? Router::getLessonsUrl($lesson['section_id']) : Router::getAdminUrl()); ?>" class="button button--secondary">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

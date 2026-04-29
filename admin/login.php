@@ -24,9 +24,9 @@ require_once '../functions.php';
 require_once '../Database.php';
 require_once '../Router.php';
 
-// Если администратор уже авторизован, перенаправляем на главную админ-панели
+// Wenn Administrator bereits autorisiert ist, leiten wir zur Haupt-Admin-Panel weiter
 if (Router::isAdmin()) {
-    Router::redirect('/bod');
+    Router::redirect(Router::getAdminUrl());
 }
 
 $error = '';
@@ -42,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_login_time'] = time();
         
-        // Перенаправление на главную админ-панели
-        Router::redirect('/bod');
+        // Redirect zur Haupt-Admin-Panel
+        Router::redirect(Router::getAdminUrl());
     } else {
         $error = 'Неверный логин или пароль';
     }
