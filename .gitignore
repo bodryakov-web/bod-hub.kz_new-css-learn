@@ -2,7 +2,9 @@
 .db_init/
 .debug/
 .docs/
+.vscode/
 
-# Docker файлы
+
+# Файлы для игнорирования
 docker-compose.yml
 Dockerfile
