@@ -33,9 +33,12 @@ $router->addRoute('home', function() use ($db) {
     $sections = $db->getSections();
     
     // Получение уроков для каждого раздела
-    foreach ($sections as &$section) {
+    $sectionsWithLessons = [];
+    foreach ($sections as $section) {
         $section['lessons'] = $db->getLessonsBySection($section['id'], true); // Только опубликованные
+        $sectionsWithLessons[] = $section;
     }
+    $sections = $sectionsWithLessons;
     
     include TEMPLATES_PATH . 'sections.php';
 });

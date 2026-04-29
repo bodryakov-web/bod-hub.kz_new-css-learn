@@ -233,6 +233,45 @@ class Database {
     }
     
     /**
+     * Проверка уникальности порядкового номера для раздела
+     * @param int $order
+     * @param int|null $excludeId Исключить ID при проверке (для редактирования)
+     * @return bool
+     */
+    public function isSectionOrderUnique($order, $excludeId = null) {
+        $sql = "SELECT COUNT(*) as count FROM sections WHERE section_order = ?";
+        $params = [$order];
+        
+        if ($excludeId) {
+            $sql .= " AND id != ?";
+            $params[] = $excludeId;
+        }
+        
+        $result = $this->fetch($sql, $params);
+        return $result['count'] == 0;
+    }
+    
+    /**
+     * Проверка уникальности порядкового номера для урока
+     * @param int $order
+     * @param int $sectionId
+     * @param int|null $excludeId Исключить ID при проверке (для редактирования)
+     * @return bool
+     */
+    public function isLessonOrderUnique($order, $sectionId, $excludeId = null) {
+        $sql = "SELECT COUNT(*) as count FROM lessons WHERE lesson_order = ? AND section_id = ?";
+        $params = [$order, $sectionId];
+        
+        if ($excludeId) {
+            $sql .= " AND id != ?";
+            $params[] = $excludeId;
+        }
+        
+        $result = $this->fetch($sql, $params);
+        return $result['count'] == 0;
+    }
+    
+    /**
      * Валидация slug (только маленькие английские буквы и дефисы)
      * @param string $slug
      * @return bool

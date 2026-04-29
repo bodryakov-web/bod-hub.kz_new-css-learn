@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageType = 'success';
             
             // Перенаправление на список разделов
-            header('Location: sections.php?message=' . urlencode($message) . '&type=' . $messageType);
+            header('Location: /bod/sections?message=' . urlencode($message) . '&type=' . $messageType);
             exit;
             
         } catch (Exception $e) {
@@ -111,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Установка мета-данных
 $pageTitle = $isEdit ? 'Редактирование раздела' : 'Создание раздела';
-$pageDescription = $isEdit ? 'Изменение данных раздела' : 'Добавление нового раздела в курс';
 $pageHeader = $isEdit ? 'Редактирование раздела' : 'Новый раздел';
 $isAdmin = true;
 

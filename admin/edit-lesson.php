@@ -36,6 +36,14 @@ $lesson = null;
 $lessonContent = null;
 $isEdit = false;
 
+// Restore form data from session if available (after validation errors)
+$savedFormData = null;
+if (isset($_SESSION['lesson_form_data'])) {
+    $savedFormData = $_SESSION['lesson_form_data'];
+    // Clear the session data after retrieving it
+    unset($_SESSION['lesson_form_data']);
+}
+
 // Получение разделов для выпадающего списка
 $sections = $db->fetchAll("SELECT * FROM sections ORDER BY section_order ASC");
 
@@ -188,7 +196,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $messageType = 'success';
             
-            // Перенаправление на список уроков раздела
+            // Clear session data after successful save
+            unset($_SESSION['lesson_form_data']);
+            
+            // Redirect to lessons list of the section
             $targetSectionId = $isEdit ? $lesson['section_id'] : $sectionId;
             header('Location: /bod/lessons/' . $targetSectionId . '?message=' . urlencode($message) . '&type=' . $messageType);
             exit;
@@ -198,6 +209,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $messageType = 'error';
         }
     } else {
+        // Save form data to session for restoration after validation errors
+        $_SESSION['lesson_form_data'] = [
+            'section_id' => $sectionId,
+            'title' => $title,
+            'slug' => $slug,
+            'order' => $order,
+            'theory' => $theory,
+            'is_published' => $isPublished,
+            'tests' => $tests,
+            'tasks' => $tasks
+        ];
+        
         $message = implode('<br>', $errors);
         $messageType = 'error';
     }
@@ -205,7 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Установка мета-данных
 $pageTitle = $isEdit ? 'Редактирование урока' : 'Создание урока';
-$pageDescription = $isEdit ? 'Изменение данных урока' : 'Добавление нового урока в курс';
+$pageDescription = '';
 $pageHeader = $isEdit ? 'Редактирование урока' : 'Новый урок';
 $isAdmin = true;
 
@@ -240,7 +263,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
     <form method="POST" class="admin-form" id="lessonForm">
         <!-- Основная информация -->
         <div class="form-section">
-            <h3 class="form-section__title">Основная информация</h3>
             
             <div class="form-group">
                 <label for="section_id" class="form-label">Раздел *</label>
@@ -253,6 +275,8 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                                 if (isset($lesson['section_id']) && $lesson['section_id'] == $section['id']) {
                                     $selected = true;
                                 } elseif (isset($_GET['section']) && (int)$_GET['section'] == $section['id']) {
+                                    $selected = true;
+                                } elseif ($savedFormData && $savedFormData['section_id'] == $section['id']) {
                                     $selected = true;
                                 }
                                 echo $selected ? 'selected' : ''; 
@@ -269,7 +293,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        id="title" 
                        name="title" 
                        class="form-input" 
-                       value="<?php echo htmlspecialchars($lesson['title_ru'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                       value="<?php echo htmlspecialchars($savedFormData['title'] ?? $lesson['title_ru'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                        required 
                        placeholder="Например: CSS Grid Layout - основы">
             </div>
@@ -280,7 +304,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        id="slug" 
                        name="slug" 
                        class="form-input" 
-                       value="<?php echo htmlspecialchars($lesson['slug'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
+                       value="<?php echo htmlspecialchars($savedFormData['slug'] ?? $lesson['slug'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                        required 
                        pattern="[a-z-]+"
                        placeholder="css-grid-layout-osnovy">
@@ -295,7 +319,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        id="order" 
                        name="order" 
                        class="form-input" 
-                       value="<?php echo (int)($lesson['lesson_order'] ?? 1); ?>"
+                       value="<?php echo (int)($savedFormData['order'] ?? $lesson['lesson_order'] ?? 1); ?>"
                        required 
                        min="1"
                        placeholder="1">
@@ -307,7 +331,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             <div class="form-group">
                 <label class="checkbox-label">
                     <input type="checkbox" name="is_published" value="1" 
-                           <?php echo (isset($lesson['is_published']) && $lesson['is_published']) ? 'checked' : ''; ?>>
+                           <?php echo ($savedFormData && $savedFormData['is_published']) || (isset($lesson['is_published']) && $lesson['is_published']) ? 'checked' : ''; ?>>
                     <span class="checkbox-text">Опубликовать урок</span>
                 </label>
                 <div class="form-help">
@@ -321,26 +345,24 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             <h3 class="form-section__title">Теоретический материал</h3>
             
             <div class="form-group">
-                <label for="theory" class="form-label">Содержание урока *</label>
+                <label for="theory" class="form-label">Содержание урока</label>
                 <div id="editor" style="height: 400px;">
-                    <?php echo $lessonContent['theory'] ?? ''; ?>
+                    <?php echo $savedFormData['theory'] ?? $lessonContent['theory'] ?? ''; ?>
                 </div>
                 <input type="hidden" name="theory" id="theory" value="<?php echo htmlspecialchars($lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
-                <div class="form-help">
-                    Используйте текстовый редактор для форматирования содержания урока.
-                </div>
             </div>
         </div>
         
-        <!-- Тесты -->
+        <!-- Tests -->
         <div class="form-section">
-            <h3 class="form-section__title">Тесты</h3>
+            <h3 class="form-section__title">Tests</h3>
             
             <div id="testsContainer">
                 <?php 
-                $tests = $lessonContent['tests'] ?? [];
+                // Use saved tests data if available, otherwise use lesson data
+                $tests = $savedFormData['tests'] ?? $lessonContent['tests'] ?? [];
                 if (empty($tests)) {
-                    // Добавляем один пустой тест для новых уроков
+                    // Add one empty test for new lessons
                     $tests = [[]];
                 }
                 
@@ -348,7 +370,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 ?>
                 <div class="test-item" data-test-index="<?php echo $index; ?>">
                     <div class="test-header">
-                        <h4 class="test-title">Вопрос <?php echo $index + 1; ?></h4>
+                        <h4 class="test-title">Question <?php echo $index + 1; ?></h4>
                         <?php if ($index > 0): ?>
                         <button type="button" class="button button--small button--danger" onclick="removeTest(<?php echo $index; ?>)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -385,7 +407,6 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                             </label>
                         </div>
                         <?php endfor; ?>
-                        <div class="form-help">Отметьте правильный ответ, выбрав радиокнопку слева от варианта</div>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -485,6 +506,18 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 Сохранить черновик
             </button>
             
+            <?php if ($isEdit): ?>
+            <button type="button" class="button button--primary" onclick="publishLesson()">
+                <span class="button__icon">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="17,21 17,13 7,13 7,21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                Publish
+            </button>
+            <?php else: ?>
             <button type="submit" class="button button--primary">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -493,8 +526,9 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                         <polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <?php echo $isEdit ? 'Сохранить изменения' : 'Создать урок'; ?>
+                Create lesson
             </button>
+            <?php endif; ?>
         </div>
     </form>
 </div>
@@ -672,6 +706,12 @@ function removeTask(index) {
 // Функция сохранения черновика
 function saveDraft() {
     document.querySelector('input[name="is_published"]').checked = false;
+    document.getElementById('lessonForm').submit();
+}
+
+// Функция публикации урока
+function publishLesson() {
+    document.querySelector('input[name="is_published"]').checked = true;
     document.getElementById('lessonForm').submit();
 }
 </script>

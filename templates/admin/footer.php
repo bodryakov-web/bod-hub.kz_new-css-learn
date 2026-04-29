@@ -19,9 +19,6 @@ if (!defined('NEW_CSS_LEARN')) {
                 <p class="admin-footer__copyright">
                     © <?php echo date('Y'); ?> <?php echo APP_NAME; ?> - Админ-панель
                 </p>
-                <p class="admin-footer__description">
-                    Система управления учебным курсом по современному CSS
-                </p>
             </div>
         </div>
     </footer>

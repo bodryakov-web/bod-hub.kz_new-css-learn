@@ -100,8 +100,5 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - ' . APP_NAME : APP_NAME;
             <!-- Заголовок страницы -->
             <div class="page-header">
                 <h1 class="page-header__title"><?php echo htmlspecialchars($pageHeader, ENT_QUOTES, 'UTF-8'); ?></h1>
-                <?php if (isset($pageDescription)): ?>
-                <p class="page-header__description"><?php echo htmlspecialchars($pageDescription, ENT_QUOTES, 'UTF-8'); ?></p>
-                <?php endif; ?>
-            </div>
+                            </div>
             <?php endif; ?>

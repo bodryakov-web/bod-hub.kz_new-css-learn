@@ -11,7 +11,7 @@ if (!defined('NEW_CSS_LEARN')) {
 
 // Установка мета-данных
 $pageTitle = $lesson['title_ru'];
-$pageDescription = 'Урок ' . $lesson['lesson_order'] . ' из раздела "' . $section['title_ru'] . '"';
+$pageDescription = $lesson['title_ru'];
 $pageHeader = $lesson['title_ru'];
 $requireQuiz = !empty($lessonContent) && !empty($lessonContent['tests']);
 
@@ -19,17 +19,6 @@ $requireQuiz = !empty($lessonContent) && !empty($lessonContent['tests']);
 require_once TEMPLATES_PATH . 'header.php';
 ?>
 
-<!-- Информация об уроке -->
-<div class="lesson-header">
-    <div class="lesson-header__meta">
-        <span class="lesson-header__section">
-            Раздел <?php echo (int)$section['section_order']; ?>: <?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?>
-        </span>
-        <span class="lesson-header__order">
-            Урок <?php echo (int)$lesson['lesson_order']; ?>
-        </span>
-    </div>
-</div>
 
 <!-- Контент урока -->
 <div class="lesson-content">
