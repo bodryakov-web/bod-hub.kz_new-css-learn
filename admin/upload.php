@@ -107,7 +107,7 @@ try {
     }
     
     // Формирование URL для доступа к файлу
-    $fileUrl = '/uploads/lessons/' . $lessonId . '/images/' . $filename;
+    $fileUrl = getUploadUrl('lessons/' . $lessonId . '/images/' . $filename);
     
     // Возврат успешного ответа
     sendJSONResponse([

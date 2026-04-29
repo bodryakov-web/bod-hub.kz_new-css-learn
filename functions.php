@@ -387,4 +387,26 @@ function getNumWord($number, $words) {
         return $words[2];
     }
 }
+
+/**
+ * Получение правильного URL для ресурсов (CSS, JS, изображения)
+ * Работает как локально, так и на хостинге
+ * @param string $path Относительный путь от папки assets, например 'css/main.css'
+ * @return string Полный URL к ресурсу
+ */
+function getAssetUrl($path) {
+    $path = ltrim($path, '/');
+    return APP_URL . '/assets/' . $path;
+}
+
+/**
+ * Получение правильного URL для загрузок
+ * @param string $path Относительный путь от папки uploads
+ * @return string Полный URL к файлу загрузки
+ */
+function getUploadUrl($path) {
+    $path = ltrim($path, '/');
+    return APP_URL . '/uploads/' . $path;
+}
+
 ?>

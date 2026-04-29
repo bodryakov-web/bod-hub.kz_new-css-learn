@@ -27,16 +27,16 @@ if (!defined('NEW_CSS_LEARN')) {
     </footer>
 
     <!-- Подключение JavaScript -->
-    <script src="<?php echo APP_URL; ?>/assets/js/theme-toggle.js"></script>
-    <script src="<?php echo APP_URL; ?>/assets/js/main.js"></script>
+    <script src="<?php echo getAssetUrl('js/theme-toggle.js'); ?>"></script>
+    <script src="<?php echo getAssetUrl('js/main.js'); ?>"></script>
     
     <?php if (isset($requireQuiz) && $requireQuiz): ?>
-    <script src="<?php echo APP_URL; ?>/assets/js/quiz.js"></script>
+    <script src="<?php echo getAssetUrl('js/quiz.js'); ?>"></script>
     <?php endif; ?>
 
     <!-- Дополнительные скрипты для админ-панели -->
     <?php if (isset($isAdmin) && $isAdmin): ?>
-    <script src="<?php echo APP_URL; ?>/assets/js/admin.js"></script>
+    <script src="<?php echo getAssetUrl('js/admin.js'); ?>"></script>
     <?php endif; ?>
 
 </body>

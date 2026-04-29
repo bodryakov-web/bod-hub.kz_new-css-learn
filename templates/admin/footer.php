@@ -27,8 +27,8 @@ if (!defined('NEW_CSS_LEARN')) {
     </footer>
 
     <!-- Подключение JavaScript -->
-    <script src="/assets/js/theme-toggle.js"></script>
-    <script src="/assets/js/admin.js"></script>
+    <script src="<?php echo getAssetUrl('js/theme-toggle.js'); ?>"></script>
+    <script src="<?php echo getAssetUrl('js/admin.js'); ?>"></script>
 
 </body>
 </html>
