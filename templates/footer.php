@@ -17,7 +17,9 @@ if (!defined('NEW_CSS_LEARN')) {
         <div class="footer__container">
             <div class="footer__content">
                 <p class="footer__copyright">
-                    <?php echo date('Y'); ?> <?php echo APP_NAME; ?> - Учебный курс по современному CSS
+                    <?php echo date('Y'); ?> |  
+                    <?php echo APP_NAME; ?> - Учебный курс по новейшему (2017-2026) CSS |
+                    Автор: преподаватель ГТК - Бодряков А.Ю.
                 </p>
             </div>
         </div>
