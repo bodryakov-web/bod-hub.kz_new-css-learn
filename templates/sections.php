@@ -27,14 +27,6 @@ require_once TEMPLATES_PATH . 'header.php';
                     <h2 class="section-card__title">
                         <?php echo htmlspecialchars($section['title_ru'], ENT_QUOTES, 'UTF-8'); ?>
                     </h2>
-                    <div class="section-card__meta">
-                        <span class="section-card__order">
-                            Раздел <?php echo (int)$section['section_order']; ?>
-                        </span>
-                        <span class="section-card__lessons-count">
-                            <?php echo count($section['lessons']); ?> уроков
-                        </span>
-                    </div>
                 </div>
                 
                 <div class="section-card__content">
@@ -45,9 +37,6 @@ require_once TEMPLATES_PATH . 'header.php';
                                    class="lesson-link"
                                    data-lesson-id="<?php echo (int)$lesson['id']; ?>">
                                     <div class="lesson-link__content">
-                                        <span class="lesson-link__order">
-                                            <?php echo (int)$lesson['lesson_order']; ?>.
-                                        </span>
                                         <span class="lesson-link__title">
                                             <?php echo htmlspecialchars($lesson['title_ru'], ENT_QUOTES, 'UTF-8'); ?>
                                         </span>

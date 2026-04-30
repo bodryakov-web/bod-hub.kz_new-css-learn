@@ -26,14 +26,16 @@
 
   --color-background: oklch(1 0 0);
   --color-surface: oklch(0.98 0 0);
-  --color-surface-hover: oklch(0.96 0 0);
-  --color-surface-active: oklch(0.92 0 0);
+  --color-surface-button: oklch(0.96 0 0);
+  --color-surface-button-hover: oklch(0.94 0 0);
+  --color-surface-hover: oklch(0.92 0 0);
+  --color-surface-active: oklch(0.9 0 0);
   
 
   /* Границы и разделители */
-  --color-border: #e2e8f0;
-  --color-border-light: #f1f5f9;
-  --color-border-dark: #cbd5e1;
+  --color-border: oklch(0.92 0 0);
+  --color-border-light: oklch(0.94 0 0);
+  --color-border-dark: oklch(0.9 0 0);
   
   /* Статусные цвета */
   --color-success: #10b981;
@@ -236,6 +238,7 @@ a:focus {
   justify-content: center;
   transition: all var(--transition-fast);
   color: var(--color-text-secondary);
+  margin-left: auto;
 }
 
 .theme-toggle:hover {
@@ -376,21 +379,6 @@ a:focus {
   margin-bottom: var(--spacing-sm);
 }
 
-.section-card__meta {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  flex-wrap: wrap;
-}
-
-.section-card__order,
-.section-card__lessons-count {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  background-color: var(--color-surface-hover);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-}
 
 .section-card__content {
   display: flex;
@@ -430,15 +418,6 @@ a:focus {
   gap: var(--spacing-sm);
 }
 
-.lesson-link__order {
-  font-weight: 600;
-  color: var(--color-primary);
-  min-width: 24px;
-}
-
-.lesson-link:hover .lesson-link__order {
-  color: var(--color-text-inverse);
-}
 
 .lesson-link__title {
   font-weight: 500;
@@ -1066,7 +1045,7 @@ body {
   align-items: center;
   gap: var(--spacing-md);
   padding: var(--spacing-md) var(--spacing-lg);
-  background-color: var(--color-surface);
+  background-color: var(--color-surface-button);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   text-decoration: none;
@@ -1077,6 +1056,8 @@ body {
 
 .lesson-navigation__button:hover {
   color: var(--color-primary-dark);
+  background-color: var(--color-surface-button-hover);
+  border: 1px solid var(--color-border-dark);
   text-decoration: none;
 }
 
@@ -1085,11 +1066,11 @@ body {
   color: var(--color-primary);
 }
 
-.lesson-navigation__button--home {
+/* .lesson-navigation__button--home {
   background-color: var(--color-surface);
   color: var(-color-text-primary);
   border-color: var(--color-border);
-}
+} */
 
 .lesson-navigation__button--primary {
   background-color: var(--color-primary);
