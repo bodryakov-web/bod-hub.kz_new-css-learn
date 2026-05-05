@@ -3,6 +3,24 @@
  * Material Design для административного интерфейса
  */
 
+/* CSS переменные для редактора теории (восстановленные размеры) */
+:root {
+  /* Размеры шрифтов для редактора (в 2 раза больше обычных) */
+  --editor-font-size-xs: 1.5rem;
+  --editor-font-size-sm: 1.75rem;
+  --editor-font-size-base: 2rem;
+  --editor-font-size-lg: 2.25rem;
+  --editor-font-size-xl: 2.5rem;
+  --editor-font-size-2xl: 3rem;
+  --editor-font-size-3xl: 3.75rem;
+  --editor-font-size-4xl: 4.5rem;
+  --editor-font-size-5xl: 6rem;
+  
+  /* Размеры шрифтов для заголовков админ-панели (оригинальные размеры) */
+  --admin-header-font-size: 1.25rem;
+  --admin-page-title-font-size: 1.875rem;
+}
+
 /* Общие стили админ-панели */
 .admin-body {
   background-color: var(--color-background);
@@ -13,8 +31,7 @@
 .admin-header {
   background-color: var(--color-surface);
   border-bottom: 2px solid var(--color-primary);
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: var(--z-sticky);
   box-shadow: var(--shadow-md);
 }
@@ -51,7 +68,7 @@
 }
 
 .admin-header__title {
-  font-size: var(--font-size-xl);
+  font-size: var(--admin-header-font-size);
   font-weight: 600;
   margin: 0;
   line-height: 1.2;
@@ -195,7 +212,7 @@
 }
 
 .admin-page-header__title {
-  font-size: var(--font-size-3xl);
+  font-size: var(--admin-page-title-font-size);
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
@@ -369,7 +386,8 @@
 }
 
 .admin-form {
-  max-width: 800px;
+  width: calc(100% - 4vw);
+  margin: 0 2vw;
 }
 
 .form-section {
@@ -792,16 +810,220 @@
   background-color: var(--color-background);
   color: var(--color-text-primary);
   min-height: 200px;
+  height: 80vh;
+}
+
+.ql-container.ql-snow {
+  height: 80vh;
 }
 
 .ql-editor {
   color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
+  font-size: var(--editor-font-size-sm);
   line-height: var(--line-height-normal);
+  height: 80vh;
 }
 
 .ql-editor.ql-blank::before {
   color: var(--color-text-muted);
+}
+
+/* Стили для блоков кода в Quill редакторе */
+.ql-editor pre {
+  background-color: var(--color-surface-active) !important;
+  border: 1px solid var(--color-border-dark) !important;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--editor-font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor code {
+  background-color: var(--color-surface-active) !important;
+  border: 1px solid var(--color-border-dark) !important;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--editor-font-size-sm);
+  color: var(--color-text-primary) !important;
+}
+
+/* Дополнительные стили для переопределения Quill */
+.ql-editor pre *,
+.ql-editor code * {
+  color: var(--color-text-primary) !important;
+}
+
+/* Общие стили для блоков кода в админке */
+pre, code {
+  background-color: var(--color-surface-active) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-dark);
+}
+
+pre {
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+code {
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+}
+
+/* Переопределяем все возможные стили Quill для кода */
+.ql-editor .ql-code-block-container,
+.ql-editor .ql-code-block {
+  background-color: var(--color-surface-active) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-dark) !important;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  font-family: var(--font-family-mono) !important;
+  font-size: var(--editor-font-size-sm) !important;
+}
+
+/* Переопределение стилей Quill Snow темы для блоков кода */
+.ql-snow .ql-editor pre {
+  background-color: var(--color-surface-active) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-dark) !important;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono) !important;
+  font-size: var(--editor-font-size-sm) !important;
+  line-height: var(--line-height-normal);
+}
+
+.ql-snow .ql-editor code {
+  background-color: var(--color-surface-active) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-dark) !important;
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family-mono) !important;
+  font-size: var(--editor-font-size-sm) !important;
+}
+
+/* Максимальная специфичность для переопределения Quill стилей */
+body .ql-snow .ql-editor pre,
+body .ql-snow .ql-editor code {
+  background-color: var(--color-surface-active) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-dark) !important;
+}
+
+/* Увеличенные размеры шрифтов для всех текстовых элементов в редакторе */
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  font-size: var(--editor-font-size-base) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor p,
+.ql-editor div,
+.ql-editor span,
+.ql-editor ul,
+.ql-editor ol,
+.ql-editor li {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor blockquote {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor a {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-primary) !important;
+}
+
+.ql-editor strong,
+.ql-editor b {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor em,
+.ql-editor i {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor u {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.ql-editor s,
+.ql-editor strike {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* Максимальная специфичность для всех текстовых элементов редактора */
+body .ql-snow .ql-editor h1,
+body .ql-snow .ql-editor h2,
+body .ql-snow .ql-editor h3,
+body .ql-snow .ql-editor h4,
+body .ql-snow .ql-editor h5,
+body .ql-snow .ql-editor h6,
+body .ql-snow .ql-editor p,
+body .ql-snow .ql-editor div,
+body .ql-snow .ql-editor span,
+body .ql-snow .ql-editor ul,
+body .ql-snow .ql-editor ol,
+body .ql-snow .ql-editor li,
+body .ql-snow .ql-editor blockquote,
+body .ql-snow .ql-editor a,
+body .ql-snow .ql-editor strong,
+body .ql-snow .ql-editor b,
+body .ql-snow .ql-editor em,
+body .ql-snow .ql-editor i,
+body .ql-snow .ql-editor u,
+body .ql-snow .ql-editor s,
+body .ql-snow .ql-editor strike {
+  font-size: var(--editor-font-size-sm) !important;
+}
+
+body .ql-snow .ql-editor h1,
+body .ql-snow .ql-editor h2,
+body .ql-snow .ql-editor h3,
+body .ql-snow .ql-editor h4,
+body .ql-snow .ql-editor h5,
+body .ql-snow .ql-editor h6 {
+  font-size: var(--editor-font-size-base) !important;
+}
+
+
+/* Переопределение всех возможных классов Quill для кода */
+.ql-editor pre[class],
+.ql-editor code[class],
+.ql-editor pre[style],
+.ql-editor code[style] {
+  background-color: var(--color-surface-active) !important;
+  color: var(--color-text-primary) !important;
+  border: 1px solid var(--color-border-dark) !important;
 }
 
 .task-editor {
@@ -810,6 +1032,36 @@
   border-radius: var(--radius-md);
   background-color: var(--color-background);
 }
+
+/* Увеличенные размеры шрифтов для редакторов задач */
+.task-editor .ql-editor {
+  font-size: var(--editor-font-size-sm) !important;
+}
+
+.task-editor .ql-editor p,
+.task-editor .ql-editor div,
+.task-editor .ql-editor span,
+.task-editor .ql-editor ul,
+.task-editor .ql-editor ol,
+.task-editor .ql-editor li {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.task-editor .ql-editor strong,
+.task-editor .ql-editor b,
+.task-editor .ql-editor em,
+.task-editor .ql-editor i,
+.task-editor .ql-editor u,
+.task-editor .ql-editor a {
+  font-size: var(--editor-font-size-sm) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.task-editor .ql-editor a {
+  color: var(--color-primary) !important;
+}
+
 
 /* Поиск в таблицах */
 .table-search {
@@ -988,7 +1240,8 @@
   }
   
   .admin-form {
-    max-width: 900px;
+    width: calc(100% - 4vw);
+    margin: 0 2vw;
   }
 }
 
@@ -1077,11 +1330,66 @@
   border-top-color: var(--color-border);
 }
 
+/* Отключение автоматического форматирования списков в Quill редакторе */
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  list-style: none !important;
+}
+
+.ql-editor li {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-indent: 0 !important;
+}
+
+/* Переопределение стилей для вложенных списков */
+.ql-editor ul ul,
+.ql-editor ol ol,
+.ql-editor ul ol,
+.ql-editor ol ul {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.ql-editor li::before {
+  content: none !important;
+}
+
+/* Максимальная специфичность для переопределения стилей Quill */
+body .ql-snow .ql-editor ul,
+body .ql-snow .ql-editor ol {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  list-style: none !important;
+}
+
+body .ql-snow .ql-editor li {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-indent: 0 !important;
+}
+
+body .ql-snow .ql-editor ul ul,
+body .ql-snow .ql-editor ol ol,
+body .ql-snow .ql-editor ul ol,
+body .ql-snow .ql-editor ol ul {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+body .ql-snow .ql-editor li::before {
+  content: none !important;
+}
+
 /* Стили для кнопок Quill с подсказками */
 .ql-toolbar button {
   position: relative;
 }
 
-.ql-toolbar button[data-tooltip] {
+.ql-toolbar button[data-tooltip],
+.ql-toolbar select[data-tooltip],
+.ql-toolbar .ql-picker[data-tooltip] {
   cursor: help;
 }

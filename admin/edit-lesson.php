@@ -346,7 +346,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             
             <div class="form-group">
                 <label for="theory" class="form-label"></label>
-                <div id="editor" style="height: 400px;">
+                <div id="editor">
                     <?php echo $savedFormData['theory'] ?? $lessonContent['theory'] ?? ''; ?>
                 </div>
                 <input type="hidden" name="theory" id="theory" value="<?php echo htmlspecialchars($savedFormData['theory'] ?? $lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
@@ -533,13 +533,8 @@ var quill = new Quill('#editor', {
     modules: {
         toolbar: [
             [{ 'header': [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'indent': '-1'}, { 'indent': '+1' }],
-            [{ 'direction': 'rtl' }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
+            ['bold', 'italic', 'underline'],
+            ['code-block'],
             [{ 'color': [] }, { 'background': [] }],
             [{ 'font': [] }],
             [{ 'align': [] }],
@@ -570,7 +565,6 @@ document.querySelectorAll('.task-editor').forEach(function(element, index) {
         modules: {
             toolbar: [
                 ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 ['link', 'image'],
                 ['clean']
             ]
@@ -690,7 +684,6 @@ function addTask() {
         modules: {
             toolbar: [
                 ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 ['link', 'image'],
                 ['clean']
             ]

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormValidation();
     initializeDataTables();
     initializeConfirmations();
+    // initializeQuillTooltips(); // Вызывается из edit-lesson.php
     
     /**
      * Инициализация общих функций админ-панели
@@ -443,6 +444,29 @@ document.addEventListener('DOMContentLoaded', function() {
         // Находим все панели инструментов Quill
         const toolbars = document.querySelectorAll('.ql-toolbar');
         
+        // Если панели инструментов еще не созданы, ждем их появления
+        if (toolbars.length === 0) {
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.addedNodes) {
+                        for (let node of mutation.addedNodes) {
+                            if (node.nodeType === 1 && (node.classList.contains('ql-toolbar') || node.querySelector && node.querySelector('.ql-toolbar'))) {
+                                observer.disconnect();
+                                setTimeout(initializeQuillTooltips, 100);
+                                return;
+                            }
+                        }
+                    }
+                });
+            });
+            
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+            return;
+        }
+        
         toolbars.forEach((toolbar, index) => {
             // Добавляем подсказки к кнопкам
             const allButtons = toolbar.querySelectorAll('button');
@@ -513,9 +537,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
+            // Добавляем подсказки к выпадающим спискам
+            const allSelects = toolbar.querySelectorAll('select');
+            
+            // Ищем визуальные элементы, которые заменяют скрытые select
+            const allSpans = toolbar.querySelectorAll('.ql-picker');
+            
+            allSpans.forEach((span) => {
+                const classes = span.className;
+                
+                // Ищем связанный select для определения типа
+                const classList = classes.split(' ');
+                const selectClass = classList.find(cls => cls.startsWith('ql-'));
+                
+                if (selectClass) {
+                    if (selectClass.includes('ql-header')) {
+                        span.setAttribute('data-tooltip', 'Заголовок');
+                        span.setAttribute('aria-label', 'Заголовок');
+                    } else if (selectClass.includes('ql-size')) {
+                        span.setAttribute('data-tooltip', 'Размер текста');
+                        span.setAttribute('aria-label', 'Размер текста');
+                    } else if (selectClass.includes('ql-font')) {
+                        span.setAttribute('data-tooltip', 'Шрифт');
+                        span.setAttribute('aria-label', 'Шрифт');
+                    } else if (selectClass.includes('ql-align')) {
+                        span.setAttribute('data-tooltip', 'Выравнивание');
+                        span.setAttribute('aria-label', 'Выравнивание');
+                    } else if (selectClass.includes('ql-color')) {
+                        span.setAttribute('data-tooltip', 'Цвет текста');
+                        span.setAttribute('aria-label', 'Цвет текста');
+                    } else if (selectClass.includes('ql-background')) {
+                        span.setAttribute('data-tooltip', 'Цвет фона');
+                        span.setAttribute('aria-label', 'Цвет фона');
+                    }
+                }
+            });
+            
             // Инициализация обработчиков событий для подсказок
             const buttons = toolbar.querySelectorAll('button[data-tooltip]');
+            const selects = toolbar.querySelectorAll('select[data-tooltip]');
+            const pickers = toolbar.querySelectorAll('.ql-picker[data-tooltip]');
             
+            // Обработчики для кнопок
             buttons.forEach((button, btnIndex) => {
                 let timeout = null;
                 
@@ -539,19 +602,71 @@ document.addEventListener('DOMContentLoaded', function() {
                     hideQuillTooltip();
                 });
             });
+            
+            // Обработчики для выпадающих списков
+            selects.forEach((select) => {
+                let timeout = null;
+                
+                select.addEventListener('mouseenter', function(e) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        showQuillTooltip(select, e);
+                    }, 300);
+                });
+                
+                select.addEventListener('mouseleave', function() {
+                    clearTimeout(timeout);
+                    hideQuillTooltip();
+                });
+                
+                select.addEventListener('focus', function(e) {
+                    showQuillTooltip(select, e);
+                });
+                
+                select.addEventListener('blur', function() {
+                    hideQuillTooltip();
+                });
+            });
+            
+            // Обработчики для picker элементов
+            pickers.forEach((picker) => {
+                let timeout = null;
+                
+                picker.addEventListener('mouseenter', function(e) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        showQuillTooltip(picker, e);
+                    }, 300);
+                });
+                
+                picker.addEventListener('mouseleave', function() {
+                    clearTimeout(timeout);
+                    hideQuillTooltip();
+                });
+                
+                picker.addEventListener('focus', function(e) {
+                    showQuillTooltip(picker, e);
+                });
+                
+                picker.addEventListener('blur', function() {
+                    hideQuillTooltip();
+                });
+            });
         });
     }
     
     /**
      * Показать всплывающую подсказку
-     * @param {HTMLElement} button - кнопка
+     * @param {HTMLElement} element - элемент (кнопка или select)
      * @param {Event} event - событие
      */
-    function showQuillTooltip(button, event) {
+    function showQuillTooltip(element, event) {
         hideQuillTooltip(); // Сначала скрываем существующие подсказки
         
-        const tooltipText = button.getAttribute('data-tooltip');
-        if (!tooltipText) return;
+        const tooltipText = element.getAttribute('data-tooltip');
+        if (!tooltipText) {
+            return;
+        }
         
         const tooltip = document.createElement('div');
         tooltip.className = 'quill-tooltip';

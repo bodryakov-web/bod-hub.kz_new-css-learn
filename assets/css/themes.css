@@ -330,7 +330,6 @@ body.loaded *::after {
 [data-theme="dark"] pre,
 [data-theme="dark"] code {
   background-color: var(--color-surface-active);
-  color: var(--color-text-primary);
   border: 1px solid var(--color-border-dark);
 }
 
@@ -457,6 +456,30 @@ body.loaded *::after {
 
 [data-theme="dark"] .ql-editor.ql-blank::before {
   color: var(--color-text-muted);
+}
+
+/* Стили для блоков кода в Quill редакторе в темной теме */
+[data-theme="dark"] .ql-editor pre,
+[data-theme="dark"] .ql-editor code {
+  background-color: var(--color-surface-active);
+  border: 1px solid var(--color-border-dark);
+}
+
+[data-theme="dark"] .ql-editor pre {
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  overflow-x: auto;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+[data-theme="dark"] .ql-editor code {
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-sm);
 }
 
 /* Стили для подсказок в темной теме */
