@@ -590,6 +590,17 @@ document.querySelectorAll('.task-editor').forEach(function(element, index) {
     });
 });
 
+// Инициализация всплывающих подсказок для всех редакторов Quill
+// Ждем полной загрузки DOM и всех скриптов
+document.addEventListener('DOMContentLoaded', function() {
+    // Даем дополнительное время на загрузку admin.js
+    setTimeout(function() {
+        if (window.adminUtils && window.adminUtils.initializeQuillTooltips) {
+            window.adminUtils.initializeQuillTooltips();
+        }
+    }, 500);
+});
+
 // Функции для управления тестами
 var testCount = <?php echo max(1, count($tests)); ?>;
 
@@ -692,6 +703,13 @@ function addTask() {
             hiddenInput.value = newTaskEditor.root.innerHTML;
         }
     });
+    
+    // Инициализация подсказок для нового редактора
+    if (window.adminUtils && window.adminUtils.initializeQuillTooltips) {
+        setTimeout(() => {
+            window.adminUtils.initializeQuillTooltips();
+        }, 100);
+    }
 }
 
 function removeTask(index) {

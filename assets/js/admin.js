@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Закрытие навигации при клике вне ее
         document.addEventListener('click', function(e) {
-            if (adminNav && !adminNav.contains(e.target) && !navToggle.contains(e.target)) {
+            if (adminNav && navToggle && !adminNav.contains(e.target) && !navToggle.contains(e.target)) {
                 adminNav.classList.remove('admin-nav--open');
                 navToggle.classList.remove('admin-nav__toggle--active');
             }
@@ -436,11 +436,173 @@ document.addEventListener('DOMContentLoaded', function() {
         return icons[type] || icons.info;
     }
     
+    /**
+     * Инициализация всплывающих подсказок для Quill редактора
+     */
+    function initializeQuillTooltips() {
+        // Находим все панели инструментов Quill
+        const toolbars = document.querySelectorAll('.ql-toolbar');
+        
+        toolbars.forEach((toolbar, index) => {
+            // Добавляем подсказки к кнопкам
+            const allButtons = toolbar.querySelectorAll('button');
+            allButtons.forEach(button => {
+                const classes = button.className;
+                const value = button.value || '';
+                
+                // Простые кнопки без значения
+                if (classes.includes('ql-bold')) {
+                    button.setAttribute('data-tooltip', 'Жирный текст (Ctrl+B)');
+                    button.setAttribute('aria-label', 'Жирный текст (Ctrl+B)');
+                } else if (classes.includes('ql-italic')) {
+                    button.setAttribute('data-tooltip', 'Курсив (Ctrl+I)');
+                    button.setAttribute('aria-label', 'Курсив (Ctrl+I)');
+                } else if (classes.includes('ql-underline')) {
+                    button.setAttribute('data-tooltip', 'Подчеркнутый текст (Ctrl+U)');
+                    button.setAttribute('aria-label', 'Подчеркнутый текст (Ctrl+U)');
+                } else if (classes.includes('ql-strike')) {
+                    button.setAttribute('data-tooltip', 'Зачеркнутый текст');
+                    button.setAttribute('aria-label', 'Зачеркнутый текст');
+                } else if (classes.includes('ql-blockquote')) {
+                    button.setAttribute('data-tooltip', 'Цитата');
+                    button.setAttribute('aria-label', 'Цитата');
+                } else if (classes.includes('ql-code-block')) {
+                    button.setAttribute('data-tooltip', 'Блок кода');
+                    button.setAttribute('aria-label', 'Блок кода');
+                } else if (classes.includes('ql-link')) {
+                    button.setAttribute('data-tooltip', 'Вставить ссылку');
+                    button.setAttribute('aria-label', 'Вставить ссылку');
+                } else if (classes.includes('ql-image')) {
+                    button.setAttribute('data-tooltip', 'Вставить изображение');
+                    button.setAttribute('aria-label', 'Вставить изображение');
+                } else if (classes.includes('ql-clean')) {
+                    button.setAttribute('data-tooltip', 'Удалить форматирование');
+                    button.setAttribute('aria-label', 'Удалить форматирование');
+                }
+                
+                // Кнопки со значениями
+                if (classes.includes('ql-list')) {
+                    if (value === 'ordered') {
+                        button.setAttribute('data-tooltip', 'Нумерованный список');
+                        button.setAttribute('aria-label', 'Нумерованный список');
+                    } else if (value === 'bullet') {
+                        button.setAttribute('data-tooltip', 'Маркированный список');
+                        button.setAttribute('aria-label', 'Маркированный список');
+                    }
+                } else if (classes.includes('ql-script')) {
+                    if (value === 'sub') {
+                        button.setAttribute('data-tooltip', 'Подстрочный индекс');
+                        button.setAttribute('aria-label', 'Подстрочный индекс');
+                    } else if (value === 'super') {
+                        button.setAttribute('data-tooltip', 'Надстрочный индекс');
+                        button.setAttribute('aria-label', 'Надстрочный индекс');
+                    }
+                } else if (classes.includes('ql-indent')) {
+                    if (value === '-1') {
+                        button.setAttribute('data-tooltip', 'Уменьшить отступ');
+                        button.setAttribute('aria-label', 'Уменьшить отступ');
+                    } else if (value === '+1') {
+                        button.setAttribute('data-tooltip', 'Увеличить отступ');
+                        button.setAttribute('aria-label', 'Увеличить отступ');
+                    }
+                } else if (classes.includes('ql-direction')) {
+                    if (value === 'rtl') {
+                        button.setAttribute('data-tooltip', 'Направление текста справа налево');
+                        button.setAttribute('aria-label', 'Направление текста справа налево');
+                    }
+                }
+            });
+            
+            // Инициализация обработчиков событий для подсказок
+            const buttons = toolbar.querySelectorAll('button[data-tooltip]');
+            
+            buttons.forEach((button, btnIndex) => {
+                let timeout = null;
+                
+                button.addEventListener('mouseenter', function(e) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        showQuillTooltip(button, e);
+                    }, 300);
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    clearTimeout(timeout);
+                    hideQuillTooltip();
+                });
+                
+                button.addEventListener('focus', function(e) {
+                    showQuillTooltip(button, e);
+                });
+                
+                button.addEventListener('blur', function() {
+                    hideQuillTooltip();
+                });
+            });
+        });
+    }
+    
+    /**
+     * Показать всплывающую подсказку
+     * @param {HTMLElement} button - кнопка
+     * @param {Event} event - событие
+     */
+    function showQuillTooltip(button, event) {
+        hideQuillTooltip(); // Сначала скрываем существующие подсказки
+        
+        const tooltipText = button.getAttribute('data-tooltip');
+        if (!tooltipText) return;
+        
+        const tooltip = document.createElement('div');
+        tooltip.className = 'quill-tooltip';
+        tooltip.textContent = tooltipText;
+        
+        // Добавляем подсказку в DOM
+        document.body.appendChild(tooltip);
+        
+        // Простое позиционирование под курсором
+        const mouseX = event.clientX || 0;
+        const mouseY = event.clientY || 0;
+        
+        // Позиционируем подсказку под курсором
+        tooltip.style.position = 'fixed';
+        tooltip.style.left = (mouseX + 5) + 'px';
+        tooltip.style.top = (mouseY + 15) + 'px';
+        
+        // Показываем подсказку с анимацией
+        requestAnimationFrame(() => {
+            tooltip.classList.add('quill-tooltip--show');
+        });
+        
+        // Сохраняем ссылку для последующего скрытия
+        window.currentQuillTooltip = tooltip;
+    }
+    
+    /**
+     * Скрыть всплывающую подсказку
+     */
+    function hideQuillTooltip() {
+        if (window.currentQuillTooltip) {
+            window.currentQuillTooltip.classList.remove('quill-tooltip--show');
+            
+            setTimeout(() => {
+                if (window.currentQuillTooltip && window.currentQuillTooltip.parentNode) {
+                    window.currentQuillTooltip.parentNode.removeChild(window.currentQuillTooltip);
+                }
+                window.currentQuillTooltip = null;
+            }, 200);
+        }
+    }
+    
+        
     // Экспортируем функции для использования в других скриптах
     window.adminUtils = {
         showNotification: showNotification,
         uploadImage: uploadImage,
         sortTable: sortTable,
-        filterTable: filterTable
+        filterTable: filterTable,
+        initializeQuillTooltips: initializeQuillTooltips,
+        showQuillTooltip: showQuillTooltip,
+        hideQuillTooltip: hideQuillTooltip
     };
 });
