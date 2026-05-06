@@ -94,6 +94,140 @@ if (isset($_GET['id'])) {
     }
 }
 
+// Обработка AJAX запроса для сохранения черновика
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_save_draft'])) {
+    // Устанавливаем заголовок для JSON ответа
+    header('Content-Type: application/json');
+    
+    try {
+        // Подключение к базе данных
+        $db = Database::getInstance();
+        
+        // Получение данных из формы
+        $lessonId = isset($_POST['lesson_id']) ? (int)$_POST['lesson_id'] : null;
+        $sectionId = (int)($_POST['section_id'] ?? 0);
+        $title = Router::sanitize($_POST['title'] ?? '');
+        $slug = Router::sanitize($_POST['slug'] ?? '');
+        $order = (int)($_POST['order'] ?? 0);
+        $theory = $_POST['theory'] ?? '';
+        
+                
+        // Обработка тестов
+        $tests = [];
+        if (isset($_POST['test_question'])) {
+            foreach ($_POST['test_question'] as $index => $question) {
+                if (!empty(trim($question))) {
+                    $answers = [
+                        Router::sanitize($_POST['test_answer_' . $index . '_0'] ?? ''),
+                        Router::sanitize($_POST['test_answer_' . $index . '_1'] ?? ''),
+                        Router::sanitize($_POST['test_answer_' . $index . '_2'] ?? ''),
+                        Router::sanitize($_POST['test_answer_' . $index . '_3'] ?? '')
+                    ];
+                    $correct = (int)($_POST['test_correct_' . $index] ?? 0);
+                    
+                    $tests[] = [
+                        'question' => Router::sanitize($question),
+                        'answers' => array_filter($answers),
+                        'correct' => $correct
+                    ];
+                }
+            }
+        }
+        
+        // Обработка задач
+        $tasks = [];
+        if (isset($_POST['task_title'])) {
+            foreach ($_POST['task_title'] as $index => $taskTitle) {
+                if (!empty(trim($taskTitle))) {
+                    $tasks[] = [
+                        'title' => Router::sanitize($taskTitle),
+                        'description' => $_POST['task_description_' . $index] ?? ''
+                    ];
+                }
+            }
+        }
+        
+        // Формирование контента урока
+        $content = [
+            'theory' => $theory,
+            'tests' => $tests,
+            'tasks' => $tasks
+        ];
+        
+        // Базовая валидация
+        $errors = [];
+        
+        if ($sectionId <= 0) {
+            $errors[] = 'Выберите раздел';
+        }
+        
+        if (empty($title)) {
+            $errors[] = 'Название урока обязательно для заполнения';
+        }
+        
+        if (empty($slug)) {
+            $errors[] = 'Slug обязателен для заполнения';
+        } elseif (!$db->isValidSlug($slug)) {
+            $errors[] = 'Slug может содержать только маленькие английские буквы и дефисы';
+        } elseif (!$db->isLessonSlugUnique($slug, $sectionId, $lessonId)) {
+            $errors[] = 'Такой slug уже существует в этом разделе';
+        }
+        
+        if ($order <= 0) {
+            $errors[] = 'Порядковый номер должен быть положительным числом';
+        } elseif (!$db->isLessonOrderUnique($order, $sectionId, $lessonId)) {
+            $errors[] = 'Такой порядковый номер уже существует в этом разделе';
+        }
+        
+        if (empty($theory)) {
+            $errors[] = 'Теоретический материал обязателен для заполнения';
+        }
+        
+        if (!empty($errors)) {
+            echo json_encode([
+                'success' => false, 
+                'message' => implode('<br>', $errors),
+                'errors' => $errors
+            ]);
+            exit;
+        }
+        
+        // Сохранение в базу данных
+        $contentJson = jsonEncode($content);
+        
+        if ($lessonId) {
+            // Обновление существующего урока
+            $db->query(
+                "UPDATE lessons SET section_id = ?, title_ru = ?, slug = ?, lesson_order = ?, content = ?, is_published = 0 WHERE id = ?",
+                [$sectionId, $title, $slug, $order, $contentJson, $lessonId]
+            );
+            $message = 'Черновик урока успешно обновлен';
+        } else {
+            // Создание нового урока
+            $db->query(
+                "INSERT INTO lessons (section_id, title_ru, slug, lesson_order, content, is_published) VALUES (?, ?, ?, ?, ?, 0)",
+                [$sectionId, $title, $slug, $order, $contentJson]
+            );
+            $lessonId = $db->getLastInsertId();
+            $message = 'Черновик урока успешно создан';
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'message' => $message,
+            'lesson_id' => $lessonId
+        ]);
+        
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Ошибка при сохранении черновика: ' . $e->getMessage()
+        ]);
+    }
+    exit;
+}
+
 // Обработка формы
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $sectionId = (int)($_POST['section_id'] ?? 0);
@@ -527,7 +661,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 
 <script>
 // Initialization of Quill editor
-var quill = new Quill('#editor', {
+window.quill = new Quill('#editor', {
     theme: 'snow',
     placeholder: 'Напишите содержание урока...',
     modules: {
@@ -556,10 +690,10 @@ quill.on('text-change', function() {
 });
 
 // Инициализация редакторов для задач
-var taskEditors = {};
+window.taskEditors = {};
 document.querySelectorAll('.task-editor').forEach(function(element, index) {
     var taskIndex = element.getAttribute('data-task-index');
-    taskEditors[taskIndex] = new Quill(element, {
+    window.taskEditors[taskIndex] = new Quill(element, {
         theme: 'snow',
         placeholder: 'Описание задачи...',
         modules: {
@@ -574,12 +708,12 @@ document.querySelectorAll('.task-editor').forEach(function(element, index) {
     // Initialize editor content from hidden field (for form data restoration)
     var hiddenInput = document.querySelector('input[name="task_description_' + taskIndex + '"]');
     if (hiddenInput && hiddenInput.value) {
-        taskEditors[taskIndex].root.innerHTML = hiddenInput.value;
+        window.taskEditors[taskIndex].root.innerHTML = hiddenInput.value;
     }
     
-    taskEditors[taskIndex].on('text-change', function() {
+    window.taskEditors[taskIndex].on('text-change', function() {
         if (hiddenInput) {
-            hiddenInput.value = taskEditors[taskIndex].root.innerHTML;
+            hiddenInput.value = window.taskEditors[taskIndex].root.innerHTML;
         }
     });
 });
@@ -678,7 +812,7 @@ function addTask() {
     container.insertAdjacentHTML('beforeend', taskHtml);
     
     // Инициализация редактора для новой задачи
-    var newTaskEditor = new Quill(`[data-task-index="${taskIndex}"]`, {
+    window.taskEditors[taskIndex] = new Quill(`[data-task-index="${taskIndex}"]`, {
         theme: 'snow',
         placeholder: 'Описание задачи...',
         modules: {
@@ -690,10 +824,10 @@ function addTask() {
         }
     });
     
-    newTaskEditor.on('text-change', function() {
+    window.taskEditors[taskIndex].on('text-change', function() {
         var hiddenInput = document.querySelector(`input[name="task_description_${taskIndex}"]`);
         if (hiddenInput) {
-            hiddenInput.value = newTaskEditor.root.innerHTML;
+            hiddenInput.value = window.taskEditors[taskIndex].root.innerHTML;
         }
     });
     
@@ -714,8 +848,113 @@ function removeTask(index) {
 
 // Функция сохранения черновика
 function saveDraft() {
-    document.querySelector('input[name="is_published"]').checked = false;
-    document.getElementById('lessonForm').submit();
+    // Явно синхронизируем контент из всех Quill редакторов
+    // Основной редактор теории
+    if (window.quill) {
+        document.getElementById('theory').value = window.quill.root.innerHTML;
+    }
+    
+    // Редакторы задач
+    if (window.taskEditors) {
+        Object.keys(window.taskEditors).forEach(taskIndex => {
+            const hiddenInput = document.querySelector(`input[name="task_description_${taskIndex}"]`);
+            if (hiddenInput && window.taskEditors[taskIndex]) {
+                hiddenInput.value = window.taskEditors[taskIndex].root.innerHTML;
+            }
+        });
+    }
+    
+    const form = document.getElementById('lessonForm');
+    const formData = new FormData(form);
+    
+    // Принудительно устанавливаем is_published = 0 для черновика
+    formData.set('is_published', '0');
+    
+    // Добавляем lesson_id для определения режима редактирования
+    const lessonId = <?php echo $isEdit ? (int)$lesson['id'] : 'null'; ?>;
+    if (lessonId) {
+        formData.append('lesson_id', lessonId);
+    }
+    
+    // Добавляем флаг для AJAX запроса
+    formData.append('ajax_save_draft', '1');
+    
+    // Показываем индикатор загрузки
+    const saveButton = document.querySelector('button[onclick="saveDraft()"]');
+    const originalText = saveButton.innerHTML;
+    saveButton.innerHTML = '<span class="button__icon"><div class="loading-spinner"></div></span>Сохранение...';
+    saveButton.disabled = true;
+    
+    // Отправляем AJAX запрос
+    fetch(window.location.href, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Показываем сообщение об успехе
+            showMessage(data.message, 'success');
+            
+            // Если это был новый урок, обновляем URL для режима редактирования
+            if (!lessonId && data.lesson_id) {
+                const newUrl = window.location.pathname.replace('/new/', '/edit/') + data.lesson_id;
+                history.replaceState({}, '', newUrl);
+            }
+        } else {
+            // Показываем сообщение об ошибке
+            showMessage(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showMessage('Произошла ошибка при сохранении черновика', 'error');
+    })
+    .finally(() => {
+        // Восстанавливаем кнопку
+        saveButton.innerHTML = originalText;
+        saveButton.disabled = false;
+    });
+}
+
+// Функция показа сообщений
+function showMessage(message, type) {
+    // Удаляем существующие сообщения
+    const existingMessages = document.querySelectorAll('.admin-message');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // Создаем новое сообщение
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `admin-message admin-message--${type}`;
+    messageDiv.innerHTML = `
+        <div class="admin-message__content">
+            <span class="admin-message__icon admin-message__icon--${type}">
+                ${type === 'success' ? 
+                    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>' :
+                    '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                }
+            </span>
+            <span class="admin-message__text">${message}</span>
+        </div>
+    `;
+    
+    // Вставляем сообщение после заголовка страницы
+    const pageHeader = document.querySelector('.admin-page-header');
+    if (pageHeader) {
+        pageHeader.after(messageDiv);
+    } else {
+        // Если заголовок не найден, вставляем в начало формы
+        const form = document.querySelector('.admin-form-container');
+        if (form) {
+            form.before(messageDiv);
+        }
+    }
+    
+    // Автоматически скрываем сообщение через 5 секунд
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
 }
 
 // Функция публикации урока

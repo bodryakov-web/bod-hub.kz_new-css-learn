@@ -27,6 +27,7 @@ RewriteRule ^bod/lesson/edit/([0-9]+)/?$ admin/edit-lesson.php?id=$1 [L]
 RewriteRule ^bod/lesson/new/([0-9]+)/?$ admin/edit-lesson.php?section=$1 [L]
 RewriteRule ^bod/lesson/new/?$ admin/edit-lesson.php [L]
 RewriteRule ^bod/upload/?$ admin/upload.php [L]
+RewriteRule ^bod/admin/save-draft/?$ admin/save-draft.php [L]
 
 # Правила для загрузки изображений
 RewriteRule ^uploads/([0-9]+)/images/(.+)$ uploads/$1/images/$2 [L]
