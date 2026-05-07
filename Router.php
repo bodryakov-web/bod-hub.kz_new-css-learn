@@ -259,6 +259,19 @@ class Router {
     }
     
     /**
+     * Очистка текстовых данных без преобразования кавычек
+     * Используется для текстовых полей где кавычки должны оставаться кавычками
+     * @param string $data
+     * @return string
+     */
+    public static function sanitizeText($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data, ENT_NOQUOTES, 'UTF-8');
+        return $data;
+    }
+    
+    /**
      * Получение текущего URL
      * @return string
      */

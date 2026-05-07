@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             
             // Добавляем класс правильного ответа
-            selectedAnswer.classList.add('quiz-answer--correct');
+            selectedAnswer.classList.add('quiz-answer--correct', 'quiz-answer--selected');
         } else {
             resultElement.setAttribute('data-result', 'incorrect');
             resultElement.innerHTML = `
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             
             // Добавляем класс неправильного ответа
-            selectedAnswer.classList.add('quiz-answer--incorrect');
+            selectedAnswer.classList.add('quiz-answer--incorrect', 'quiz-answer--selected');
             
             // Показываем правильный ответ
             const answers = question.querySelectorAll('.quiz-answer');
@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 radioInput.disabled = false;
                 
                 // Удаляем классы результатов
-                answer.classList.remove('quiz-answer--correct', 'quiz-answer--incorrect');
+                answer.classList.remove('quiz-answer--correct', 'quiz-answer--incorrect', 'quiz-answer--selected');
             });
             
             // Скрываем результат

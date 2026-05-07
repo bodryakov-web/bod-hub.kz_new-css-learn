@@ -157,17 +157,7 @@ require_once TEMPLATES_PATH . 'header.php';
                 </a>
             <?php endif; ?>
 
-            <a href="<?php echo Router::getHomeUrl(); ?>" 
-               class="lesson-navigation__button lesson-navigation__button--home">
-                <span class="lesson-navigation__icon">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <polyline points="9,22 9,12 15,12 15,22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-                <span class="lesson-navigation__title">В оглавление</span>
-            </a>
-
+            
             <?php if (isset($navigation['next'])): ?>
                 <a href="<?php echo htmlspecialchars($navigation['next']['url'], ENT_QUOTES, 'UTF-8'); ?>" 
                    class="lesson-navigation__button lesson-navigation__button--next">
@@ -185,7 +175,7 @@ require_once TEMPLATES_PATH . 'header.php';
 
             <?php if (isset($navigation['home'])): ?>
                 <a href="<?php echo htmlspecialchars($navigation['home']['url'], ENT_QUOTES, 'UTF-8'); ?>" 
-                   class="lesson-navigation__button lesson-navigation__button--home lesson-navigation__button--primary">
+                   class="lesson-navigation__button lesson-navigation__button--home">
                     <span class="lesson-navigation__icon">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

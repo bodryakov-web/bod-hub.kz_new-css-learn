@@ -57,10 +57,10 @@ try {
         foreach ($_POST['test_question'] as $index => $question) {
             if (!empty(trim($question))) {
                 $answers = [
-                    Router::sanitize($_POST['test_answer_' . $index . '_0'] ?? ''),
-                    Router::sanitize($_POST['test_answer_' . $index . '_1'] ?? ''),
-                    Router::sanitize($_POST['test_answer_' . $index . '_2'] ?? ''),
-                    Router::sanitize($_POST['test_answer_' . $index . '_3'] ?? '')
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_0'] ?? ''),
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_1'] ?? ''),
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_2'] ?? ''),
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_3'] ?? '')
                 ];
                 $correct = (int)($_POST['test_correct_' . $index] ?? 0);
                 

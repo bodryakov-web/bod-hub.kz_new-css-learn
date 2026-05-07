@@ -118,10 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax_save_draft'])) {
             foreach ($_POST['test_question'] as $index => $question) {
                 if (!empty(trim($question))) {
                     $answers = [
-                        Router::sanitize($_POST['test_answer_' . $index . '_0'] ?? ''),
-                        Router::sanitize($_POST['test_answer_' . $index . '_1'] ?? ''),
-                        Router::sanitize($_POST['test_answer_' . $index . '_2'] ?? ''),
-                        Router::sanitize($_POST['test_answer_' . $index . '_3'] ?? '')
+                        Router::sanitizeText($_POST['test_answer_' . $index . '_0'] ?? ''),
+                        Router::sanitizeText($_POST['test_answer_' . $index . '_1'] ?? ''),
+                        Router::sanitizeText($_POST['test_answer_' . $index . '_2'] ?? ''),
+                        Router::sanitizeText($_POST['test_answer_' . $index . '_3'] ?? '')
                     ];
                     $correct = (int)($_POST['test_correct_' . $index] ?? 0);
                     
@@ -243,10 +243,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($_POST['test_question'] as $index => $question) {
             if (!empty(trim($question))) {
                 $answers = [
-                    Router::sanitize($_POST['test_answer_' . $index . '_0'] ?? ''),
-                    Router::sanitize($_POST['test_answer_' . $index . '_1'] ?? ''),
-                    Router::sanitize($_POST['test_answer_' . $index . '_2'] ?? ''),
-                    Router::sanitize($_POST['test_answer_' . $index . '_3'] ?? '')
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_0'] ?? ''),
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_1'] ?? ''),
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_2'] ?? ''),
+                    Router::sanitizeText($_POST['test_answer_' . $index . '_3'] ?? '')
                 ];
                 $correct = (int)($_POST['test_correct_' . $index] ?? 0);
                 
@@ -803,7 +803,7 @@ function addTask() {
             
             <div class="form-group">
                 <label class="form-label">Описание задачи</label>
-                <div class="task-editor" data-task-index="${taskIndex}"></div>
+                <div class="task-editor" data-task-index="${taskIndex}" id="task-editor-${taskIndex}"></div>
                 <input type="hidden" name="task_description_${taskIndex}" value="">
             </div>
         </div>
@@ -811,37 +811,49 @@ function addTask() {
     
     container.insertAdjacentHTML('beforeend', taskHtml);
     
-    // Инициализация редактора для новой задачи
-    window.taskEditors[taskIndex] = new Quill(`[data-task-index="${taskIndex}"]`, {
-        theme: 'snow',
-        placeholder: 'Описание задачи...',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                ['link', 'image'],
-                ['clean']
-            ]
+    // Небольшая задержка для гарантии создания DOM элемента
+    setTimeout(function() {
+        var editorElement = document.getElementById(`task-editor-${taskIndex}`);
+        if (editorElement) {
+            // Инициализация редактора для новой задачи
+            window.taskEditors[taskIndex] = new Quill(editorElement, {
+                theme: 'snow',
+                placeholder: 'Описание задачи...',
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+            
+            // Привязка события text-change к скрытому полю
+            window.taskEditors[taskIndex].on('text-change', function() {
+                var hiddenInput = document.querySelector(`input[name="task_description_${taskIndex}"]`);
+                if (hiddenInput) {
+                    hiddenInput.value = window.taskEditors[taskIndex].root.innerHTML;
+                }
+            });
+            
+            // Инициализация подсказок для нового редактора
+            if (window.adminUtils && window.adminUtils.initializeQuillTooltips) {
+                setTimeout(() => {
+                    window.adminUtils.initializeQuillTooltips();
+                }, 100);
+            }
         }
-    });
-    
-    window.taskEditors[taskIndex].on('text-change', function() {
-        var hiddenInput = document.querySelector(`input[name="task_description_${taskIndex}"]`);
-        if (hiddenInput) {
-            hiddenInput.value = window.taskEditors[taskIndex].root.innerHTML;
-        }
-    });
-    
-    // Инициализация подсказок для нового редактора
-    if (window.adminUtils && window.adminUtils.initializeQuillTooltips) {
-        setTimeout(() => {
-            window.adminUtils.initializeQuillTooltips();
-        }, 100);
-    }
+    }, 50);
 }
 
 function removeTask(index) {
     var taskItem = document.querySelector(`[data-task-index="${index}"]`);
     if (taskItem) {
+        // Очищаем редактор если он существует
+        if (window.taskEditors && window.taskEditors[index]) {
+            window.taskEditors[index].off('text-change');
+            delete window.taskEditors[index];
+        }
         taskItem.remove();
     }
 }

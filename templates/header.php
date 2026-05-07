@@ -47,7 +47,7 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - ' . APP_NAME : APP_NAME;
             
             <!-- Центральная часть с подзаголовком (только на больших экранах) -->
             <div class="header__center">
-                <p class="header__subtitle">новейший CSS c 2017 года</p>
+                <p class="header__subtitle">Новейший CSS 2017-2026 годов</p>
             </div>
             
             <!-- Правая часть с переключателем темы -->
