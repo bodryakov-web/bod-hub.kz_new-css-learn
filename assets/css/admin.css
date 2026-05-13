@@ -464,6 +464,7 @@
   cursor: pointer;
   font-weight: 400;
   color: var(--color-text-primary);
+  width: 100%;
 }
 
 .checkbox-label input[type="checkbox"],
@@ -794,7 +795,9 @@
 }
 
 .answer-option input[type="text"] {
+  width: 100%;
   flex: 1;
+  box-sizing: border-box;
 }
 
 /* Quill редактор */
