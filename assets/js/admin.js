@@ -140,19 +140,26 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 showNotification('Изображение успешно загружено', 'success');
                 
-                // Вставляем изображение в редактор Quill
-                if (window.quill) {
-                    const range = window.quill.getSelection(true);
-                    window.quill.insertEmbed(range.index, 'image', data.url);
-                    window.quill.setSelection(range.index + 1);
-                } else if (window.taskEditors) {
-                    // Для редакторов задач
-                    const activeEditor = Object.values(window.taskEditors)[0];
-                    if (activeEditor) {
-                        const range = activeEditor.getSelection(true);
-                        activeEditor.insertEmbed(range.index, 'image', data.url);
-                        activeEditor.setSelection(range.index + 1);
+                // Вставляем изображение в активный редактор CKEditor
+                var activeEditor = null;
+                
+                // Проверяем основной редактор
+                if (window.CKEDITOR && window.CKEDITOR.instances.editor) {
+                    activeEditor = window.CKEDITOR.instances.editor;
+                } else {
+                    // Ищем любой активный редактор CKEditor
+                    var editorInstances = window.CKEDITOR ? window.CKEDITOR.instances : {};
+                    for (var editorId in editorInstances) {
+                        if (editorInstances.hasOwnProperty(editorId)) {
+                            activeEditor = editorInstances[editorId];
+                            break;
+                        }
                     }
+                }
+                
+                if (activeEditor) {
+                    var html = '<img src="' + data.url + '" alt="uploaded image" style="max-width: 100%;">';
+                    activeEditor.insertHtml(html);
                 }
             } else {
                 showNotification(data.message || 'Ошибка при загрузке изображения', 'error');

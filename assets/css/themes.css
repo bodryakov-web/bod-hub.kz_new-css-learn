@@ -439,24 +439,65 @@ body.loaded *::after {
   color: var(--color-error);
 }
 
-/* Стили для Quill редактора в темной теме */
-[data-theme="dark"] .ql-toolbar {
+/* Стили для CKEditor 4 в темной теме */
+[data-theme="dark"] .cke_top {
   background-color: var(--color-surface);
   border-color: var(--color-border);
 }
 
-[data-theme="dark"] .ql-container {
+[data-theme="dark"] .cke_bottom {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .cke_contents {
   background-color: var(--color-background);
   border-color: var(--color-border);
   color: var(--color-text-primary);
 }
 
-[data-theme="dark"] .ql-editor {
+[data-theme="dark"] .cke_toolbox {
+  background-color: var(--color-surface);
+}
+
+[data-theme="dark"] .cke_toolbar {
+  background-color: var(--color-surface);
+}
+
+[data-theme="dark"] .cke_button {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
   color: var(--color-text-primary);
 }
 
-[data-theme="dark"] .ql-editor.ql-blank::before {
-  color: var(--color-text-muted);
+[data-theme="dark"] .cke_button:hover {
+  background-color: var(--color-surface-active);
+  border-color: var(--color-border-dark);
+}
+
+[data-theme="dark"] .cke_button_on {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+[data-theme="dark"] .cke_combo {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .cke_combo_on {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+}
+
+[data-theme="dark"] .cke_path_item {
+  color: var(--color-text-secondary);
+}
+
+[data-theme="dark"] .cke_path_item:hover {
+  color: var(--color-text-primary);
 }
 
 /* Стили для подсказок в темной теме */

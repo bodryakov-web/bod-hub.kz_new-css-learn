@@ -805,6 +805,7 @@ body {
 .lesson-section__content {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
+  white-space: pre-wrap;
 }
 
 /* Quiz styles */

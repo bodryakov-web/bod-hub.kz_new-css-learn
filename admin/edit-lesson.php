@@ -346,10 +346,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             
             <div class="form-group">
                 <label for="theory" class="form-label"></label>
-                <div id="editor" style="height: 400px;">
-                    <?php echo $savedFormData['theory'] ?? $lessonContent['theory'] ?? ''; ?>
-                </div>
-                <input type="hidden" name="theory" id="theory" value="<?php echo htmlspecialchars($savedFormData['theory'] ?? $lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                <textarea id="editor" name="theory" style="height: 400px;"><?php echo htmlspecialchars($savedFormData['theory'] ?? $lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
             </div>
         </div>
         
@@ -462,12 +459,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                     
                     <div class="form-group">
                         <label class="form-label">Описание задачи</label>
-                        <div class="task-editor" data-task-index="<?php echo $index; ?>">
-                            <?php echo $task['description'] ?? ''; ?>
-                        </div>
-                        <input type="hidden" 
-                               name="task_description_<?php echo $index; ?>" 
-                               value="<?php echo htmlspecialchars($task['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                        <textarea class="task-editor" name="task_description_<?php echo $index; ?>" data-task-index="<?php echo $index; ?>" style="height: 120px;"><?php echo htmlspecialchars($task['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
                     </div>
                 </div>
                 <?php endforeach; ?>
@@ -521,73 +513,55 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
     </form>
 </div>
 
-<!-- Подключение Quill редактора -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
+<!-- Подключение CKEditor 4 -->
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
 <script>
-// Initialization of Quill editor
-var quill = new Quill('#editor', {
-    theme: 'snow',
-    placeholder: 'Напишите содержание урока...',
-    modules: {
-        toolbar: [
-            [{ 'header': [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'indent': '-1'}, { 'indent': '+1' }],
-            [{ 'direction': 'rtl' }],
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'color': [] }, { 'background': [] }],
-            [{ 'font': [] }],
-            [{ 'align': [] }],
-            ['link', 'image'],
-            ['clean']
-        ]
-    }
+// Инициализация CKEditor 4 для основного редактора
+CKEDITOR.replace('editor', {
+    language: 'ru',
+    height: 400,
+    toolbar: [
+        { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+        { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
+        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+        { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
+        '/',
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+        { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
+        { name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
+        '/',
+        { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
+        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+        { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
+        { name: 'about', items: [ 'About' ] }
+    ],
+    pasteFromWordPromptCleanup: false,
+    pasteFromWordRemoveFontStyles: true,
+    pasteFromWordRemoveStyles: true
 });
 
-// Initialize editor content from hidden field (for form data restoration)
-var theoryHiddenField = document.getElementById('theory');
-if (theoryHiddenField && theoryHiddenField.value) {
-    quill.root.innerHTML = theoryHiddenField.value;
-}
+// Глобальная переменная для доступа к редактору
+window.mainEditor = CKEDITOR.instances.editor;
 
-// Sync editor content with hidden field
-quill.on('text-change', function() {
-    document.getElementById('theory').value = quill.root.innerHTML;
-});
-
-// Инициализация редакторов для задач
-var taskEditors = {};
-document.querySelectorAll('.task-editor').forEach(function(element, index) {
-    var taskIndex = element.getAttribute('data-task-index');
-    taskEditors[taskIndex] = new Quill(element, {
-        theme: 'snow',
-        placeholder: 'Описание задачи...',
-        modules: {
+// Инициализация CKEditor для существующих редакторов задач
+document.querySelectorAll('.task-editor').forEach(function(textarea) {
+    var editorId = textarea.getAttribute('name');
+    if (editorId && !CKEDITOR.instances[editorId]) {
+        CKEDITOR.replace(editorId, {
+            language: 'ru',
+            height: 120,
             toolbar: [
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['link', 'image'],
-                ['clean']
-            ]
-        }
-    });
-    
-    // Initialize editor content from hidden field (for form data restoration)
-    var hiddenInput = document.querySelector('input[name="task_description_' + taskIndex + '"]');
-    if (hiddenInput && hiddenInput.value) {
-        taskEditors[taskIndex].root.innerHTML = hiddenInput.value;
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat' ] },
+                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ] },
+                { name: 'links', items: [ 'Link', 'Unlink' ] },
+                { name: 'insert', items: [ 'Image' ] }
+            ],
+            pasteFromWordPromptCleanup: false,
+            pasteFromWordRemoveFontStyles: true,
+            pasteFromWordRemoveStyles: true
+        });
     }
-    
-    taskEditors[taskIndex].on('text-change', function() {
-        if (hiddenInput) {
-            hiddenInput.value = taskEditors[taskIndex].root.innerHTML;
-        }
-    });
 });
 
 // Функции для управления тестами
@@ -664,33 +638,27 @@ function addTask() {
             
             <div class="form-group">
                 <label class="form-label">Описание задачи</label>
-                <div class="task-editor" data-task-index="${taskIndex}"></div>
-                <input type="hidden" name="task_description_${taskIndex}" value="">
+                <textarea class="task-editor" name="task_description_${taskIndex}" data-task-index="${taskIndex}" style="height: 120px;"></textarea>
             </div>
         </div>
     `;
     
     container.insertAdjacentHTML('beforeend', taskHtml);
     
-    // Инициализация редактора для новой задачи
-    var newTaskEditor = new Quill(`[data-task-index="${taskIndex}"]`, {
-        theme: 'snow',
-        placeholder: 'Описание задачи...',
-        modules: {
-            toolbar: [
-                ['bold', 'italic', 'underline'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                ['link', 'image'],
-                ['clean']
-            ]
-        }
-    });
-    
-    newTaskEditor.on('text-change', function() {
-        var hiddenInput = document.querySelector(`input[name="task_description_${taskIndex}"]`);
-        if (hiddenInput) {
-            hiddenInput.value = newTaskEditor.root.innerHTML;
-        }
+    // Инициализация CKEditor для новой задачи
+    var taskEditorId = `task_description_${taskIndex}`;
+    CKEDITOR.replace(taskEditorId, {
+        language: 'ru',
+        height: 120,
+        toolbar: [
+            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat' ] },
+            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ] },
+            { name: 'links', items: [ 'Link', 'Unlink' ] },
+            { name: 'insert', items: [ 'Image' ] }
+        ],
+        pasteFromWordPromptCleanup: true,
+        pasteFromWordRemoveFontStyles: false,
+        pasteFromWordRemoveStyles: false
     });
 }
 

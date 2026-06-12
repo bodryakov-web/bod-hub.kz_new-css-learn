@@ -779,29 +779,64 @@
   flex: 1;
 }
 
-/* Quill редактор */
-.ql-toolbar {
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+/* CKEditor 4 стили */
+.cke_editor {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.cke_top {
+  background-color: var(--color-surface);
   border-color: var(--color-border);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.cke_bottom {
+  background-color: var(--color-surface);
+  border-color: var(--color-border);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+.cke_contents {
+  background-color: var(--color-background);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.cke_toolbox {
   background-color: var(--color-surface);
 }
 
-.ql-container {
-  border-radius: 0 0 var(--radius-md) var(--radius-md);
+.cke_toolbar {
+  background-color: var(--color-surface);
+}
+
+.cke_button {
+  background-color: var(--color-surface-hover);
   border-color: var(--color-border);
-  background-color: var(--color-background);
   color: var(--color-text-primary);
-  min-height: 200px;
 }
 
-.ql-editor {
-  color: var(--color-text-primary);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
+.cke_button:hover {
+  background-color: var(--color-surface-active);
+  border-color: var(--color-border-dark);
 }
 
-.ql-editor.ql-blank::before {
-  color: var(--color-text-muted);
+.cke_button_on {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
+  color: var(--color-primary-dark);
+}
+
+.cke_combo {
+  background-color: var(--color-surface-hover);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.cke_combo_on {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary);
 }
 
 .task-editor {
