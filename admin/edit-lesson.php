@@ -346,7 +346,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
             
             <div class="form-group">
                 <label for="theory" class="form-label"></label>
-                <textarea id="editor" name="theory" style="height: 400px;"><?php echo htmlspecialchars($savedFormData['theory'] ?? $lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                <textarea id="editor" name="theory" style="height: 75vh; font-size: 19.2px;"><?php echo htmlspecialchars($savedFormData['theory'] ?? $lessonContent['theory'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
             </div>
         </div>
         
@@ -519,30 +519,133 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 // Инициализация CKEditor 4 для основного редактора
 CKEDITOR.replace('editor', {
     language: 'ru',
-    height: 400,
+    height: '75vh',
+    versionCheck: false,
+    removePlugins: 'resize',
+    fontSize_defaultLabel: '19px',
+    fontSize_sizes: '16/16px;18/18px;19/19px;20/20px;22/22px;24/24px',
+    extraAllowedContent: 'body(font-size);p(font-size);div(font-size);span(font-size)',
+    contentsStyles: 'body { font-size: 19.2px; } p { font-size: 19.2px; } div { font-size: 19.2px; } span { font-size: 19.2px; }',
+    bodyId: 'editor-body',
+    bodyClass: 'editor-content',
+    stylesSet: [
+        { name: 'Large Text', element: 'span', attributes: { 'style': 'font-size: 19.2px;' } }
+    ],
+    on: {
+        loaded: function() {
+            var editor = this;
+            var applyStyles = function() {
+                try {
+                    var style = editor.document.$.createElement('style');
+                    style.type = 'text/css';
+                    style.id = 'custom-editor-styles';
+                    style.innerHTML = 'body { font-size: 19.2px !important; } p { font-size: 19.2px !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
+                    
+                    var existingStyle = editor.document.$.getElementById('custom-editor-styles');
+                    if (existingStyle) {
+                        existingStyle.parentNode.removeChild(existingStyle);
+                    }
+                    editor.document.$.head.appendChild(style);
+                    
+                    if (editor.document && editor.document.$ && editor.document.$.body) {
+                        editor.document.$.body.style.fontSize = '19.2px';
+                        editor.document.$.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                    }
+                    console.log('Styles applied to editor');
+                } catch(e) {
+                    console.log('Error applying styles:', e);
+                }
+            };
+            setTimeout(applyStyles, 500);
+            setInterval(applyStyles, 2000);
+            setTimeout(function() {
+                var parentWidth = editor.container.getParent().getWidth();
+                editor.resize(parentWidth, '75vh');
+            }, 100);
+        },
+        contentDom: function() {
+            var editor = this;
+            var applyStyles = function() {
+                try {
+                    var style = editor.document.$.createElement('style');
+                    style.type = 'text/css';
+                    style.id = 'custom-editor-styles';
+                    style.innerHTML = 'body { font-size: 19.2px !important; } p { font-size: 19.2px !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
+                    
+                    var existingStyle = editor.document.$.getElementById('custom-editor-styles');
+                    if (existingStyle) {
+                        existingStyle.parentNode.removeChild(existingStyle);
+                    }
+                    editor.document.$.head.appendChild(style);
+                    
+                    if (editor.document && editor.document.$ && editor.document.$.body) {
+                        editor.document.$.body.style.fontSize = '19.2px';
+                        editor.document.$.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+                    }
+                    console.log('Styles applied in contentDom');
+                } catch(e) {
+                    console.log('Error applying styles in contentDom:', e);
+                }
+            };
+            setTimeout(applyStyles, 100);
+            var observer = new MutationObserver(function(mutations) {
+                applyStyles();
+            });
+            observer.observe(editor.document.$.body, { childList: true, subtree: true });
+        }
+    },
     toolbar: [
         { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
-        { name: 'clipboard', groups: [ 'clipboard', 'undo' ], items: [ 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo' ] },
-        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'Scayt' ] },
+        { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll' ] },
         { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
-        '/',
-        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat' ] },
-        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-        { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-        { name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
-        '/',
+        { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Subscript', 'Superscript' ] },
+        { name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi' ], items: [ 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
+        { name: 'links', items: [ 'Link', 'Anchor' ] },
+        { name: 'insert', items: [ 'Image', 'Flash', 'Table', 'Smiley', 'PageBreak', 'Iframe' ] },
         { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-        { name: 'tools', items: [ 'Maximize', 'ShowBlocks' ] },
-        { name: 'about', items: [ 'About' ] }
+        { name: 'tools', items: [ 'ShowBlocks' ] }
     ],
     pasteFromWordPromptCleanup: false,
-    pasteFromWordRemoveFontStyles: true,
-    pasteFromWordRemoveStyles: true
+    pasteFromWordRemoveFontStyles: false,
+    pasteFromWordRemoveStyles: false,
 });
 
 // Глобальная переменная для доступа к редактору
 window.mainEditor = CKEDITOR.instances.editor;
+
+// Дополнительное применение стилей через iframe после полной загрузки страницы
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        var iframe = document.querySelector('iframe.cke_wysiwyg_frame');
+        if (iframe && iframe.contentDocument) {
+            var style = iframe.contentDocument.createElement('style');
+            style.type = 'text/css';
+            style.id = 'custom-editor-styles-iframe';
+            style.innerHTML = 'body { font-size: 19.2px !important; } p { font-size: 19.2px !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
+            
+            var existingStyle = iframe.contentDocument.getElementById('custom-editor-styles-iframe');
+            if (existingStyle) {
+                existingStyle.parentNode.removeChild(existingStyle);
+            }
+            iframe.contentDocument.head.appendChild(style);
+            
+            if (iframe.contentDocument.body) {
+                iframe.contentDocument.body.style.fontSize = '19.2px';
+                iframe.contentDocument.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+            }
+            console.log('Styles applied via iframe direct access');
+        }
+    }, 1000);
+    
+    setInterval(function() {
+        var iframe = document.querySelector('iframe.cke_wysiwyg_frame');
+        if (iframe && iframe.contentDocument && iframe.contentDocument.body) {
+            iframe.contentDocument.body.style.fontSize = '19.2px';
+            iframe.contentDocument.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+        }
+    }, 3000);
+});
 
 // Инициализация CKEditor для существующих редакторов задач
 document.querySelectorAll('.task-editor').forEach(function(textarea) {
@@ -551,15 +654,15 @@ document.querySelectorAll('.task-editor').forEach(function(textarea) {
         CKEDITOR.replace(editorId, {
             language: 'ru',
             height: 120,
+            versionCheck: false,
             toolbar: [
-                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat' ] },
-                { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ] },
-                { name: 'links', items: [ 'Link', 'Unlink' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+                { name: 'links', items: [ 'Link' ] },
                 { name: 'insert', items: [ 'Image' ] }
             ],
             pasteFromWordPromptCleanup: false,
-            pasteFromWordRemoveFontStyles: true,
-            pasteFromWordRemoveStyles: true
+            pasteFromWordRemoveFontStyles: false,
+            pasteFromWordRemoveStyles: false
         });
     }
 });
@@ -650,13 +753,13 @@ function addTask() {
     CKEDITOR.replace(taskEditorId, {
         language: 'ru',
         height: 120,
+        versionCheck: false,
         toolbar: [
-            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'RemoveFormat' ] },
-            { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent' ] },
-            { name: 'links', items: [ 'Link', 'Unlink' ] },
+            { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline' ] },
+            { name: 'links', items: [ 'Link' ] },
             { name: 'insert', items: [ 'Image' ] }
         ],
-        pasteFromWordPromptCleanup: true,
+        pasteFromWordPromptCleanup: false,
         pasteFromWordRemoveFontStyles: false,
         pasteFromWordRemoveStyles: false
     });

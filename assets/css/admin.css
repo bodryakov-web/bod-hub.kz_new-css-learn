@@ -173,7 +173,7 @@
 }
 
 .admin-container {
-  max-width: 1600px;
+  width: 100%;
   margin: 0 auto;
   padding: var(--spacing-xl) var(--spacing-lg);
 }
@@ -366,10 +366,11 @@
   border-radius: var(--radius-lg);
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-sm);
+  width: 100%;
 }
 
 .admin-form {
-  max-width: 800px;
+  width: 100%;
 }
 
 .form-section {
@@ -741,6 +742,14 @@
   margin-bottom: var(--spacing-lg);
 }
 
+.test-item .form-input {
+  font-size: 1.05rem;
+}
+
+.task-item .form-input {
+  font-size: 1.05rem;
+}
+
 .test-header,
 .task-header {
   display: flex;
@@ -751,7 +760,7 @@
 
 .test-title,
 .task-title {
-  font-size: var(--font-size-lg);
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--color-text-primary);
   margin: 0;
@@ -777,12 +786,44 @@
 
 .answer-option input[type="text"] {
   flex: 1;
+  font-size: 1.05rem;
+}
+
+.answer-option .radio-label {
+  width: 100%;
 }
 
 /* CKEditor 4 стили */
+#editor {
+  width: 100% !important;
+  max-width: none !important;
+}
+
 .cke_editor {
   border-radius: var(--radius-md);
   overflow: hidden;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.cke_chrome {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.cke_inner {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.cke_contents {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.cke_reset_all {
+  width: 100% !important;
+  max-width: none !important;
 }
 
 .cke_top {
@@ -801,6 +842,51 @@
   background-color: var(--color-background);
   border-color: var(--color-border);
   color: var(--color-text-primary);
+  font-size: 1.2rem;
+}
+
+.cke_editable {
+  font-size: 1.2rem !important;
+}
+
+iframe.cke_wysiwyg_frame {
+  font-size: 19.2px !important;
+}
+
+iframe.cke_wysiwyg_frame body {
+  font-size: 19.2px !important;
+}
+
+iframe.cke_wysiwyg_frame p {
+  font-size: 19.2px !important;
+}
+
+iframe.cke_wysiwyg_frame div {
+  font-size: 19.2px !important;
+}
+
+iframe.cke_wysiwyg_frame span {
+  font-size: 19.2px !important;
+}
+
+#editor-body {
+  font-size: 19.2px !important;
+}
+
+.editor-content {
+  font-size: 19.2px !important;
+}
+
+#editor-body p {
+  font-size: 19.2px !important;
+}
+
+#editor-body div {
+  font-size: 19.2px !important;
+}
+
+#editor-body span {
+  font-size: 19.2px !important;
 }
 
 .cke_toolbox {
@@ -844,6 +930,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   background-color: var(--color-background);
+  font-size: 1.05rem;
 }
 
 /* Поиск в таблицах */
@@ -1020,10 +1107,7 @@
 @media (width >= 1600px) {
   .admin-container {
     padding: var(--spacing-2xl);
-  }
-  
-  .admin-form {
-    max-width: 900px;
+    max-width: 1600px;
   }
 }
 

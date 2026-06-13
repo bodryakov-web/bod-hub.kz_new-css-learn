@@ -806,6 +806,7 @@ body {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
   white-space: pre-wrap;
+  font-size: 1.2rem;
 }
 
 /* Quiz styles */
