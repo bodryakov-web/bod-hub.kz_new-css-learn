@@ -177,24 +177,19 @@ document.addEventListener('DOMContentLoaded', function() {
         codeBlocks.forEach(function(codeBlock) {
             const pre = codeBlock.parentElement;
             
+            // Проверяем, есть ли уже кнопка копирования
+            if (pre.querySelector('.code-block__copy')) {
+                return;
+            }
+            
             // Создаем кнопку копирования
             const copyButton = document.createElement('button');
-            copyButton.className = 'copy-button';
-            copyButton.setAttribute('data-action', 'copy-code');
-            copyButton.innerHTML = `
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span class="copy-button__text">Копировать</span>
-            `;
+            copyButton.className = 'code-block__copy';
+            copyButton.setAttribute('title', 'Скопировать');
+            copyButton.textContent = 'Копировать';
             
-            // Добавляем кнопку в контейнер
-            const container = document.createElement('div');
-            container.className = 'code-container';
-            container.appendChild(copyButton);
-            pre.parentNode.insertBefore(container, pre);
-            container.appendChild(pre);
+            // Добавляем кнопку в pre
+            pre.appendChild(copyButton);
             
             // Обработчик копирования
             copyButton.addEventListener('click', async function() {
@@ -217,49 +212,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     
                     // Показываем успешное копирование
-                    copyButton.classList.add('copy-button--success');
-                    copyButton.innerHTML = `
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span class="copy-button__text">Скопировано!</span>
-                    `;
+                    copyButton.classList.add('code-block__copy--copied');
+                    copyButton.textContent = 'Скопировано!';
                     
                     // Возвращаем исходное состояние через 2 секунды
                     setTimeout(function() {
-                        copyButton.classList.remove('copy-button--success');
-                        copyButton.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <span class="copy-button__text">Копировать</span>
-                        `;
+                        copyButton.classList.remove('code-block__copy--copied');
+                        copyButton.textContent = 'Копировать';
                     }, 2000);
                     
                 } catch (err) {
                     console.error('Ошибка при копировании:', err);
-                    
-                    // Показываем ошибку
-                    copyButton.classList.add('copy-button--error');
-                    copyButton.innerHTML = `
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                            <line x1="15" y1="9" x2="9" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span class="copy-button__text">Ошибка</span>
-                    `;
+                    copyButton.textContent = 'Ошибка';
                     
                     setTimeout(function() {
-                        copyButton.classList.remove('copy-button--error');
-                        copyButton.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                            <span class="copy-button__text">Копировать</span>
-                        `;
+                        copyButton.textContent = 'Копировать';
                     }, 2000);
                 }
             });

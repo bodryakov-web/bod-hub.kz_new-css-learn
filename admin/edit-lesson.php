@@ -306,7 +306,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                        class="form-input" 
                        value="<?php echo htmlspecialchars($savedFormData['slug'] ?? $lesson['slug'] ?? '', ENT_QUOTES, 'UTF-8'); ?>"
                        required 
-                       pattern="[a-z-]+"
+                       pattern="[a-z0-9\-]+"
                        placeholder="css-grid-layout-osnovy">
                 <div class="form-help">
                     URL-псевдоним урока. Только маленькие английские буквы и дефисы.
@@ -514,7 +514,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 </div>
 
 <!-- Подключение CKEditor 4 -->
-<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<script src="/assets/ckeditor/ckeditor.js"></script>
 <script>
 // Инициализация CKEditor 4 для основного редактора
 CKEDITOR.replace('editor', {
@@ -522,14 +522,21 @@ CKEDITOR.replace('editor', {
     height: '75vh',
     versionCheck: false,
     removePlugins: 'resize',
+    extraPlugins: 'codeblock',
+    format_tags: 'p;h1;h2;h3;h4;h5;h6;pre',
     fontSize_defaultLabel: '19px',
     fontSize_sizes: '16/16px;18/18px;19/19px;20/20px;22/22px;24/24px',
-    extraAllowedContent: 'body(font-size);p(font-size);div(font-size);span(font-size)',
-    contentsStyles: 'body { font-size: 19.2px; } p { font-size: 19.2px; } div { font-size: 19.2px; } span { font-size: 19.2px; }',
+    font_names: 'Arial/Arial, Helvetica, sans-serif; Courier New/Courier New, Courier, monospace; Times New Roman/Times New Roman, Times, serif; Verdana/Verdana, Geneva, sans-serif',
+    extraAllowedContent: 'body(font-size);p(font-size);div(font-size);span(font-size);code(font-family);pre(font-family);pre(background-color);pre(border);pre(padding);pre(border-radius)',
+    contentsCss: '/assets/css/ckeditor-content.css',
+    contentsStyles: 'body { font-size: 19.2px; line-height: 1.2; } p { font-size: 19.2px; margin: 0; padding: 0; line-height: 1.2; } div { font-size: 19.2px; } span { font-size: 19.2px; }',
     bodyId: 'editor-body',
     bodyClass: 'editor-content',
     stylesSet: [
-        { name: 'Large Text', element: 'span', attributes: { 'style': 'font-size: 19.2px;' } }
+        { name: 'Large Text', element: 'span', attributes: { 'style': 'font-size: 19.2px;' } },
+        { name: 'Monospace', element: 'code', attributes: { 'style': 'font-family: "Courier New", monospace; background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px;' } },
+        { name: 'Code Block', element: 'pre', attributes: { 'style': 'background-color: #f4f4f4; border: 1px solid #ddd; border-radius: 4px; padding: 16px; margin: 16px 0; overflow-x: auto; font-family: "Fira Code", "Monaco", "Consolas", monospace; font-size: 14px; line-height: 1.5; position: relative;' } },
+        { name: 'Inline Code', element: 'code', attributes: { 'style': 'font-family: "Fira Code", "Monaco", "Consolas", monospace; background-color: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-size: 14px;' } }
     ],
     on: {
         loaded: function() {
@@ -539,7 +546,7 @@ CKEDITOR.replace('editor', {
                     var style = editor.document.$.createElement('style');
                     style.type = 'text/css';
                     style.id = 'custom-editor-styles';
-                    style.innerHTML = 'body { font-size: 19.2px !important; } p { font-size: 19.2px !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
+                    style.innerHTML = 'body { font-size: 19.2px !important; line-height: 1.2 !important; } p { font-size: 19.2px !important; margin: 0 !important; padding: 0 !important; line-height: 1.2 !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
                     
                     var existingStyle = editor.document.$.getElementById('custom-editor-styles');
                     if (existingStyle) {
@@ -559,7 +566,7 @@ CKEDITOR.replace('editor', {
             setTimeout(applyStyles, 500);
             setInterval(applyStyles, 2000);
             setTimeout(function() {
-                var parentWidth = editor.container.getParent().getWidth();
+                var parentWidth = editor.container.getParent().$.clientWidth;
                 editor.resize(parentWidth, '75vh');
             }, 100);
         },
@@ -570,7 +577,7 @@ CKEDITOR.replace('editor', {
                     var style = editor.document.$.createElement('style');
                     style.type = 'text/css';
                     style.id = 'custom-editor-styles';
-                    style.innerHTML = 'body { font-size: 19.2px !important; } p { font-size: 19.2px !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
+                    style.innerHTML = 'body { font-size: 19.2px !important; line-height: 1.2 !important; } p { font-size: 19.2px !important; margin: 0 !important; padding: 0 !important; line-height: 1.2 !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
                     
                     var existingStyle = editor.document.$.getElementById('custom-editor-styles');
                     if (existingStyle) {
@@ -595,7 +602,7 @@ CKEDITOR.replace('editor', {
         }
     },
     toolbar: [
-        { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
+        { name: 'document', groups: [ 'mode', 'document', 'doctools' ], items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates', 'CodeBlock', 'RemoveCodeBlock' ] },
         { name: 'editing', groups: [ 'find', 'selection', 'spellchecker' ], items: [ 'Find', 'Replace', '-', 'SelectAll' ] },
         { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
         { name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ], items: [ 'Bold', 'Italic', 'Underline', 'Subscript', 'Superscript' ] },
@@ -622,7 +629,7 @@ window.addEventListener('load', function() {
             var style = iframe.contentDocument.createElement('style');
             style.type = 'text/css';
             style.id = 'custom-editor-styles-iframe';
-            style.innerHTML = 'body { font-size: 19.2px !important; } p { font-size: 19.2px !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
+            style.innerHTML = 'body { font-size: 19.2px !important; line-height: 1 !important; } p { font-size: 19.2px !important; margin: 0 !important; padding: 0 !important; line-height: 1 !important; } div { font-size: 19.2px !important; } span { font-size: 19.2px !important; } * { font-size: inherit !important; }';
             
             var existingStyle = iframe.contentDocument.getElementById('custom-editor-styles-iframe');
             if (existingStyle) {

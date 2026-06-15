@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Закрытие навигации при клике вне ее
         document.addEventListener('click', function(e) {
-            if (adminNav && !adminNav.contains(e.target) && !navToggle.contains(e.target)) {
+            if (adminNav && !adminNav.contains(e.target) && navToggle && !navToggle.contains(e.target)) {
                 adminNav.classList.remove('admin-nav--open');
                 navToggle.classList.remove('admin-nav__toggle--active');
             }
