@@ -558,7 +558,6 @@ CKEDITOR.replace('editor', {
                         editor.document.$.body.style.fontSize = '19.2px';
                         editor.document.$.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
                     }
-                    console.log('Styles applied to editor');
                 } catch(e) {
                     console.log('Error applying styles:', e);
                 }
@@ -589,7 +588,6 @@ CKEDITOR.replace('editor', {
                         editor.document.$.body.style.fontSize = '19.2px';
                         editor.document.$.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
                     }
-                    console.log('Styles applied in contentDom');
                 } catch(e) {
                     console.log('Error applying styles in contentDom:', e);
                 }
@@ -641,7 +639,6 @@ window.addEventListener('load', function() {
                 iframe.contentDocument.body.style.fontSize = '19.2px';
                 iframe.contentDocument.body.style.fontFamily = 'Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
             }
-            console.log('Styles applied via iframe direct access');
         }
     }, 1000);
     

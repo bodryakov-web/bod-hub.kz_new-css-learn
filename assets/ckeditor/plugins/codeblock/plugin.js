@@ -31,16 +31,31 @@ CKEDITOR.plugins.add('codeblock', {
         editor.addCommand('removeCodeBlock', {
             exec: function(editor) {
                 var selection = editor.getSelection();
-                var element = selection.getStartElement();
                 
-                while (element && element.getName() !== 'pre' && element.getName() !== 'code') {
-                    element = element.getParent();
-                }
+                // Ищем все элементы pre в документе
+                var preElements = editor.document.find('pre');
                 
-                if (element && (element.getName() === 'pre' || element.getName() === 'code')) {
-                    var text = element.getText();
-                    editor.insertElement(new CKEDITOR.dom.element('p', editor.document)).setText(text);
-                    element.remove();
+                if (preElements.count() > 0) {
+                    // Берём первый найденный элемент pre
+                    var codeBlock = preElements.getItem(0);
+                    
+                    // Получаем текст из блока кода
+                    var text = codeBlock.getText();
+                    
+                    // Экранируем HTML символы, чтобы теги отображались как текст
+                    var escapedText = text
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                    
+                    // Создаем HTML для параграфа с экранированным текстом
+                    var html = '<p>' + escapedText.replace(/\n/g, '<br>') + '</p>';
+                    
+                    // Удаляем блок кода
+                    codeBlock.remove();
+                    
+                    // Вставляем параграф на место блока кода
+                    editor.insertHtml(html);
                 }
             }
         });
