@@ -514,7 +514,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
 </div>
 
 <!-- Подключение CKEditor 4 -->
-<script src="/assets/ckeditor/ckeditor.js"></script>
+<script src="<?php echo getAssetUrl('ckeditor/ckeditor.js'); ?>"></script>
 <script>
 // Инициализация CKEditor 4 для основного редактора
 CKEDITOR.replace('editor', {
@@ -528,7 +528,7 @@ CKEDITOR.replace('editor', {
     fontSize_sizes: '16/16px;18/18px;19/19px;20/20px;22/22px;24/24px',
     font_names: 'Arial/Arial, Helvetica, sans-serif; Courier New/Courier New, Courier, monospace; Times New Roman/Times New Roman, Times, serif; Verdana/Verdana, Geneva, sans-serif',
     extraAllowedContent: 'body(font-size);p(font-size);div(font-size);span(font-size);code(font-family);pre(font-family);pre(background-color);pre(border);pre(padding);pre(border-radius)',
-    contentsCss: '/assets/css/ckeditor-content.css',
+    contentsCss: '<?php echo getAssetUrl('css/ckeditor-content.css'); ?>',
     contentsStyles: 'body { font-size: 19.2px; line-height: 1.2; } p { font-size: 19.2px; margin: 0; padding: 0; line-height: 1.2; } div { font-size: 19.2px; } span { font-size: 19.2px; }',
     bodyId: 'editor-body',
     bodyClass: 'editor-content',
