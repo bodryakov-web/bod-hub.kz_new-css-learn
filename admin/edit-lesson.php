@@ -366,17 +366,16 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 foreach ($tests as $index => $test): 
                 ?>
                 <div class="test-item" data-test-index="<?php echo $index; ?>">
-                    <div class="test-header">
-                        <h4 class="test-title">Question <?php echo $index + 1; ?></h4>
-                        <?php if ($index > 0): ?>
+                    <?php if ($index > 0): ?>
+                    <div class="test-header" style="justify-content: flex-end;">
                         <button type="button" class="button button--small button--danger" onclick="removeTest(<?php echo $index; ?>)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </button>
-                        <?php endif; ?>
                     </div>
+                    <?php endif; ?>
                     
                     <div class="form-group">
                         <label class="form-label">Вопрос</label>
@@ -488,7 +487,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 Отмена
             </a>
             
-            <button type="button" class="button button--outline" onclick="saveDraft()">
+            <button type="button" class="button button--secondary" onclick="saveDraft()">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -499,7 +498,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                 Сохранить черновик
             </button>
             
-            <button type="submit" class="button button--primary" onclick="publishLesson()">
+            <button type="submit" class="button button--secondary" onclick="publishLesson()">
                 <span class="button__icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -507,7 +506,7 @@ require_once ADMIN_TEMPLATES_PATH . 'header.php';
                         <polyline points="7,3 7,8 15,8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </span>
-                <?php echo $isEdit ? 'Publish' : 'Publish'; ?>
+                Опубликовать
             </button>
         </div>
     </form>
@@ -680,8 +679,7 @@ function addTest() {
     
     var testHtml = `
         <div class="test-item" data-test-index="${testIndex}">
-            <div class="test-header">
-                <h4 class="test-title">Вопрос ${testIndex + 1}</h4>
+            <div class="test-header" style="justify-content: flex-end;">
                 <button type="button" class="button button--small button--danger" onclick="removeTest(${testIndex})">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
