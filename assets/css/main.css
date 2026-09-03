@@ -838,10 +838,6 @@ body {
   font-size: var(--font-size-base);
 }
 
-.lesson-section__content pre {
-  font-size: var(--font-size-base);
-}
-
 /* Quiz styles */
 .quiz-container {
   display: grid;
