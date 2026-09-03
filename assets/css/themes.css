@@ -11,24 +11,24 @@
   --color-primary-light: #93c5fd;
   --color-secondary: #94a3b8;
   --color-accent: #22d3ee;
-  
+
   /* Текстовые цвета */
   --color-text-primary: #f1f5f9;
   --color-text-secondary: #cbd5e1;
   --color-text-muted: #64748b;
   --color-text-inverse: #0f172a;
-  
+
   /* Фоновые цвета */
   --color-background: #0f172a;
   --color-surface: #1e293b;
   --color-surface-hover: #334155;
   --color-surface-active: #475569;
-  
+
   /* Границы и разделители */
   --color-border: #334155;
   --color-border-light: #475569;
   --color-border-dark: #1e293b;
-  
+
   /* Статусные цвета */
   --color-success: #10b981;
   --color-success-light: #064e3b;
@@ -38,7 +38,7 @@
   --color-error-light: #7f1d1d;
   --color-info: #3b82f6;
   --color-info-light: #1e3a8a;
-  
+
   /* Тени для темной темы */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
@@ -180,7 +180,7 @@
 }
 
 [data-theme="dark"] .quiz-question__text {
-  font-size: var(--font-size-lg);
+  font-size: calc(var(--font-size-base)*0.9);
   font-weight: 600;
   color: var(--color-text-primary);
 }
@@ -276,8 +276,10 @@
 }
 
 /* Плавные переходы для смены темы */
-*, *::before, *::after {
-  transition: 
+*,
+*::before,
+*::after {
+  transition:
     background-color var(--transition-normal),
     border-color var(--transition-normal),
     color var(--transition-normal),
@@ -285,8 +287,10 @@
 }
 
 /* Исключения для плавных переходов */
-*, *::before, *::after {
-  transition-property: 
+*,
+*::before,
+*::after {
+  transition-property:
     background-color,
     border-color,
     color,
@@ -306,10 +310,10 @@
 }
 
 /* Применяем переходы после загрузки страницы */
-body.loaded *, 
-body.loaded *::before, 
+body.loaded *,
+body.loaded *::before,
 body.loaded *::after {
-  transition: 
+  transition:
     background-color var(--transition-normal),
     border-color var(--transition-normal),
     color var(--transition-normal),
@@ -341,12 +345,12 @@ body.loaded *::after {
   overflow-x: auto;
 }
 
-[data-theme="dark"] code {
+/* [data-theme="dark"] code {
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   font-family: var(--font-family-mono);
   font-size: var(--font-size-sm);
-}
+} */
 
 /* Стили для таблиц в темной теме */
 [data-theme="dark"] .admin-table {
@@ -527,6 +531,7 @@ body.loaded *::after {
 
 /* Улучшение доступности в темной теме */
 @media (prefers-reduced-motion: reduce) {
+
   [data-theme="dark"] *,
   [data-theme="dark"] *::before,
   [data-theme="dark"] *::after {

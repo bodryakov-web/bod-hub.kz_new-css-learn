@@ -85,6 +85,12 @@
   --font-size-4xl: 2.25rem;
   --font-size-5xl: 3rem;
 
+  /* Мой шрифт */
+  --font-size-base: clamp(1.1rem, 1.0rem + 0.6vw, 1.5rem);
+  /* --font-size-base: 0.5rem; */
+  --font-size-code: clamp(1.2rem, 1.0rem + 0.6vw, 1.6rem);
+
+
   /* Высота строк */
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
@@ -197,12 +203,10 @@ a:focus {
 .header {
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
-  position: sticky;
-  top: 0;
-  z-index: var(--z-sticky);
-  backdrop-filter: blur(8px);
+  position: relative;
   background-color: rgba(248, 250, 252, 0.9);
 }
+
 
 .header__container {
   max-width: 1600px;
@@ -303,6 +307,9 @@ a:focus {
   background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   padding: var(--spacing-sm) 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .breadcrumbs__container {
@@ -441,6 +448,7 @@ a:focus {
 
 .lesson-link__title {
   font-weight: 500;
+  font-size: calc(var(--font-size-base) * 0.8);
 }
 
 .lesson-link__arrow {
@@ -702,8 +710,7 @@ body {
   border-top: 1px solid var(--color-border);
   margin-top: auto;
   height: clamp(30px, 5vh, 70px);
-  position: sticky;
-  bottom: 0;
+  position: relative;
 }
 
 .footer__container {
@@ -828,7 +835,11 @@ body {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
   white-space: pre-wrap;
-  font-size: 1.2rem;
+  font-size: var(--font-size-base);
+}
+
+.lesson-section__content pre {
+  font-size: var(--font-size-base);
 }
 
 /* Quiz styles */
@@ -903,7 +914,7 @@ body {
 }
 
 .quiz-question__text {
-  font-size: var(--font-size-lg);
+  font-size: calc(var(--font-size-base)*0.9);
   font-weight: 600;
   color: var(--color-text-primary);
   line-height: var(--line-height-relaxed);
@@ -1216,7 +1227,9 @@ body {
 }
 
 /* Блоки кода */
-pre {
+pre,
+code,
+pre code {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -1224,8 +1237,8 @@ pre {
   margin: var(--spacing-sm) 0;
   overflow-x: auto;
   font-family: var(--font-family-mono);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-normal);
+  font-size: var(--font-size-code);
+  line-height: var(--line-height-tight);
   position: relative;
 }
 

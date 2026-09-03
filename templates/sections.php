@@ -12,7 +12,6 @@ if (!defined('NEW_CSS_LEARN')) {
 // Установка мета-данных
 $pageTitle = 'Разделы курса';
 $pageDescription = 'Выберите раздел для изучения современных возможностей CSS';
-$pageHeader = 'Разделы учебного курса';
 
 // Подключение шапки
 require_once TEMPLATES_PATH . 'header.php';

@@ -31,8 +31,12 @@ $pageTitle = isset($pageTitle) ? $pageTitle . ' - ' . APP_NAME : APP_NAME;
     <link rel="stylesheet" href="<?php echo getAssetUrl('css/main.css'); ?>">
     <link rel="stylesheet" href="<?php echo getAssetUrl('css/themes.css'); ?>">
     
-    <!-- Иконка сайта -->
-    <link rel="icon" type="image/svg+xml" href="<?php echo getAssetUrl('images/favicon.svg'); ?>">
+    <!-- Иконка сайта (все браузеры и устройства) -->
+    <link rel="icon" type="image/x-icon" href="<?php echo getAssetUrl('images/favicon.ico'); ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo getAssetUrl('images/favicon.ico'); ?>">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo getAssetUrl('images/favicon.ico'); ?>">
+    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo getAssetUrl('images/favicon.ico'); ?>">
+    <link rel="shortcut icon" href="<?php echo getAssetUrl('images/favicon.ico'); ?>">
 </head>
 <body>
     <!-- Шапка сайта -->
