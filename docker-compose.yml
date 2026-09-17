@@ -39,7 +39,7 @@ services:
       - ./.db_init/db-test-data.sql:/docker-entrypoint-initdb.d/db-test-data.sql:ro  # Скрипт тестовых данных
       - mysql_data:/var/lib/mysql  # Сохранение данных MySQL между перезапусками
     ports:
-      - "3306:3306"  # Проброс порта MySQL для внешнего доступа (опционально)
+      - "3307:3306"  # Проброс порта MySQL для внешнего доступа (опционально)
     networks:
       - app-network  # Подключение к общей сети
 
